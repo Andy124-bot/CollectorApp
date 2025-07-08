@@ -25,27 +25,31 @@
                 <h1>Jump into Grumpy Shark's World and Grab a Book</h1>
                 <p>Grumpy and friends can't wait to meet you!</p>
                 <p class="parent-reminder">
-                    📢 Don't forget—you need to ask your parents' permission to purchase Grumpy's books! </p>
+                    📢 Don't forget—you need to ask your parents' permission to purchase Grumpy's books!
+                </p>
             </section>
 
             <!-- 📚 Book Covers Grid -->
             <section class="book-grid" id="book-grid">
                 <div class="book">
-                    <img src="Books/grumpy_1_cover.png" alt="Grumpy Shark's Adventures!" />
+                    <img src="{{ url_for('static', filename='books/grumpy_1_cover.png') }}"
+                        alt="Grumpy Shark's Adventures!" />
                     <h3>Grumpy Shark's Adventures!</h3>
                 </div>
                 <div class="book">
-                    <img src="Books/grumpy_2_cover.png" alt="Grumpy Meets New Friends Adventure" />
+                    <img src="{{ url_for('static', filename='books/grumpy_2_cover.png') }}"
+                        alt="Grumpy Meets New Friends Adventure" />
                     <h3>Grumpy Meets New Friends Adventure</h3>
                 </div>
                 <div class="book smaller">
-                    <img src="Books/grumpy_3_cover.png" alt="Grumpy's Save Our Sea Adventure!" />
+                    <img src="{{ url_for('static', filename='books/grumpy_3_cover.png') }}"
+                        alt="Grumpy's Save Our Sea Adventure!" />
                     <h3 class="coming-soon">Save Our Sea <br>!!!COMING SOON!!!</h3>
                 </div>
 
                 <div class="books-section">
                     <div class="book-covers">
-                        <!-- Your three book cover <img> elements go here -->
+                        <!-- Your three book cover <img> elements are already included above -->
                     </div>
                     <div class="age-check-container">
                         <label for="age-check">
@@ -57,15 +61,17 @@
                             <a href="mailto:grumpysharkwebsite@gmail.com" class="email-button">📬 Email the Author</a>
                         </div>
                     </div>
-
-                    <script>
-                        function revealEmail(checked) {
-                            document.getElementById("email-link").style.display = checked ? "block" : "none";
-                        }
-                    </script>
                 </div>
             </section>
-        </main>
+
+            <script>
+                function revealEmail(checked) {
+                    document.getElementById("email-link").style.display = checked ? "block" : "none";
+                }
+            </script>
+    </div>
+    </section>
+    </main>
     </div>
 
 </body>
