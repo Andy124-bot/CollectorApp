@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Earn Grumpy Cards</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">🃏 Gallery</a></li>
+            <li><a href="earn.html">🎰 Earn Cards</a></li>
+            <li><a href="books.html">🏅 Books</a></li>
+            <li><a href="profile.html">👤 Profile</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>🎰 Spin to Win a Gold-Star Card!</h1>
+        <button id="spin-button">Spin the Reef Wheel</button>
+        <div id="spin-result"></div>
+        <div id="unlocked-card"></div>
+
+        <p id="spin-timer" class="spin-timer">🕒 Next spin in: 23h 59m</p>
+
+        <p id="spin-timer" style="text-align: center; font-weight: bold; margin-top: 10px;"></p>
+        <div id="wheel-container">
+            <canvas id="wheel-canvas" width="300" height="300"></canvas>
+        </div>
+
+        <section id="snap-game">
+            <h2>🧠 Match the Cards to Unlock Gold-Star Awards!</h2>
+
+            <div id="game-board" class="grid-container"></div>
+
+            <div id="game-status">
+                <p><strong>Matches Found:</strong> <span id="match-count">0</span> / 25</p>
+                <p><strong>Status:</strong> <span id="status-text">Flip two cards to find a match.</span></p>
+            </div>
+
+            <div id="award-collection" class="grid-container"></div>
+
+
+
+        </section>
+    </main>
+
+
+
+    <script src="earn.js"></script>
+</body>
+
+</html>

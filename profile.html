@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Collector Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">🃏 Gallery</a></li>
+            <li><a href="earn.html">🎰 Earn Cards</a></li>
+            <li><a href="books.html">🏅 Books</a></li>
+            <li><a href="profile.html">👤 Profile</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <section class="badges-section">
+            <h2 class="award-cards-text">⭐ MY Award Cards</h2>
+            <div id="award-container" class="badge-container"></div>
+        </section>
+
+        <section class="profile-stats">
+            <p id="collected-badge-count">Collected Badges: 0</p>
+            <p id="total-badge-count">Total Badges Available: 26/26</p>
+            <p id="badge-rank">Badge Rank: Bubble Beginner</p>
+        </section>
+
+        <section>
+            <h2>🃏 Collected Gold Star Cards</h2>
+            <div id="collected-star-cards" class="card-grid"></div>
+        </section>
+
+        <section class="card-stats">
+            <p id="collected-card-count">Collected Cards: 0</p>
+            <p id="total-card-count">Total Cards Available: 26/26</p>
+        </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const badgeContainer = document.getElementById('award-container');
+                const badgeCountText = document.getElementById('collected-badge-count');
+                const badgeRank = document.getElementById('badge-rank');
+
+                const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
+
+                badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
+
+                function getRank(count) {
+                    if (count === 0) return 'Bubble Beginner';
+                    if (count < 5) return 'Friendly Fin';
+                    if (count < 10) return 'Reef Rookie';
+                    if (count < 20) return 'Tide Tamer';
+                    return 'Gold-Star Master';
+                }
+
+                badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
+
+                if (earnedBadges.length === 0) {
+                    badgeContainer.innerHTML = "<p>No badges earned yet. Play the Snap game to unlock some!</p>";
+                } else {
+                    earnedBadges.forEach((badgePath) => {
+                        const badge = document.createElement('div');
+                        badge.classList.add('badge');
+
+                        badge.innerHTML = `
+              <img src="${badgePath}" alt="Badge Image">
+              <div class="badge-label">${badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ')}</div>
+            `;
+
+                        badgeContainer.appendChild(badge);
+                    });
+                }
+
+                // If you're tracking unlocked cards in localStorage (e.g. "earnedCards"), you can add similar logic here
+                // const earnedCards = JSON.parse(localStorage.getItem('earnedCards')) || [];
+                // document.getElementById('collected-count').textContent = `Collected Cards: ${earnedCards.length}`;
+                // document.getElementById('card-rank').textContent = `Card Rank: ${getRank(earnedCards.length)}`;
+            });
+        </script>
+
+    </main>
+
+    <script src="profile.js"></script>
+</body>
+
+</html>

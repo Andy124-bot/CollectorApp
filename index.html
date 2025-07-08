@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grumpy Card Collector</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
+    <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-clone"></i> Gallery</a></li>
+            <li><a href="earn.html"><i class="fas fa-gift"></i> Earn Cards</a></li>
+            <li><a href="books.html"><i class="fas fa-star"></i> Grumpy Adventure Books</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <main role="main">
+        <h2>🏅 Gold Star Cards</h2>
+        <div id="star-card-collection" class="card-grid"></div>
+
+
+        <h2><i class="fas fa-medal" style="color:gold; margin-right:8px;"></i> Gold Star Award Cards</h2>
+        <p class="hint-text">✨ Collect to see in color!</p>
+        <p> !!!Keep Collecting To WIN Rare Grumpy Award + Legendary Golden Grumpy Award!!! </p>
+        <div id="award-collection" class="card-grid"></div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

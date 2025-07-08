@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grumpy Shark Bookshelf</title>
+    <link rel="stylesheet" href="style.css" /> <!-- Link to your existing CSS -->
+</head>
+
+<body>
+    <nav class="reef-navbar">
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="profile.html">👤 Profile</a></li>
+            <li><a href="earn.html">🎴 Snap and Spin Wheel Game</a></li>
+            <li><a href="books.html">📚 Books</a></li>
+        </ul>
+    </nav>
+    <div class="books-background">
+        <main class="book-page">
+
+            <!-- 🌊 Friendly Header -->
+            <section class="book-header">
+                <h1>Jump into Grumpy Shark's World and Grab a Book</h1>
+                <p>Grumpy and friends can't wait to meet you!</p>
+                <p class="parent-reminder">
+                    📢 Don't forget—you need to ask your parents' permission to purchase Grumpy's books! </p>
+            </section>
+
+            <!-- 📚 Book Covers Grid -->
+            <section class="book-grid" id="book-grid">
+                <div class="book">
+                    <img src="Books/grumpy_1_cover.png" alt="Grumpy Shark's Adventures!" />
+                    <h3>Grumpy Shark's Adventures!</h3>
+                </div>
+                <div class="book">
+                    <img src="Books/grumpy_2_cover.png" alt="Grumpy Meets New Friends Adventure" />
+                    <h3>Grumpy Meets New Friends Adventure</h3>
+                </div>
+                <div class="book smaller">
+                    <img src="Books/grumpy_3_cover.png" alt="Grumpy's Save Our Sea Adventure!" />
+                    <h3 class="coming-soon">Save Our Sea <br>!!!COMING SOON!!!</h3>
+                </div>
+
+                <div class="books-section">
+                    <div class="book-covers">
+                        <!-- Your three book cover <img> elements go here -->
+                    </div>
+                    <div class="age-check-container">
+                        <label for="age-check">
+                            <input type="checkbox" id="age-check" onchange="revealEmail(this.checked)">
+                            <span class="check-text">I am a parent or over 15</span>
+                        </label>
+
+                        <div id="email-link" style="display:none;">
+                            <a href="mailto:grumpysharkwebsite@gmail.com" class="email-button">📬 Email the Author</a>
+                        </div>
+                    </div>
+
+                    <script>
+                        function revealEmail(checked) {
+                            document.getElementById("email-link").style.display = checked ? "block" : "none";
+                        }
+                    </script>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+
+</html>

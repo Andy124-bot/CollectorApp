@@ -1,0 +1,11 @@
+[
+    {
+        "id": "bon_bon",
+        "name": "Bon Bon",
+        "image": "Gold_Star_Cards/bon_bon.png",
+        "rarity": "common",
+        "family": "Bubble Buddies",
+        "voiceClip": "audio/bon_bon.mp3",
+        "funFact": "Bon Bon loves marshmallow seaweed."
+    }
+]
