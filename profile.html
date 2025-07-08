@@ -8,6 +8,10 @@
 </head>
 
 <body>
+
+    <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
+    <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
+
     <nav class="main-nav">
         <ul>
             <li><a href="index.html">🃏 Gallery</a></li>
@@ -75,11 +79,6 @@
                         badgeContainer.appendChild(badge);
                     });
                 }
-
-                // If you're tracking unlocked cards in localStorage (e.g. "earnedCards"), you can add similar logic here
-                // const earnedCards = JSON.parse(localStorage.getItem('earnedCards')) || [];
-                // document.getElementById('collected-count').textContent = `Collected Cards: ${earnedCards.length}`;
-                // document.getElementById('card-rank').textContent = `Card Rank: ${getRank(earnedCards.length)}`;
             });
         </script>
 
