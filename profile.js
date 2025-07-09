@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
     const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
+    const totalCards = 26; // Adjust if your card list grows
 
     // 🏅 Update badge count
     badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
@@ -24,26 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
     badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
 
     // Render earned badges
+    badgeContainer.innerHTML = "";
     if (earnedBadges.length === 0) {
         badgeContainer.innerHTML = "<p>No badges earned yet. Play the Snap game to unlock some!</p>";
     } else {
         earnedBadges.forEach(badgePath => {
             const badge = document.createElement('div');
             badge.classList.add('badge');
-
             const name = badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ');
-
             badge.innerHTML = `
           <img src="${badgePath}" alt="${name}">
           <div class="badge-label">${name}</div>
         `;
-
             badgeContainer.appendChild(badge);
         });
     }
 
     // Render Gold Star Cards
-    const totalCards = 26;
+    collectedStarContainer.innerHTML = "";
     const remaining = totalCards - earnedStarCards.length;
 
     if (earnedStarCards.length === 0) {
@@ -53,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const displayName = filename.replace(".png", "").replace(/_/g, " ");
             const card = document.createElement("div");
             card.className = "card collected";
-
             card.innerHTML = `
           <div class="card-inner">
             <div class="card-front">
@@ -62,17 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
         `;
-
             collectedStarContainer.appendChild(card);
         });
     }
 
-    // Show card collection stats
+    // 🎯 Card collection stats
     collectedCardCount.textContent = `Collected Cards: ${earnedStarCards.length}`;
-
-    if (remaining === 0) {
-        totalCardCount.textContent = `🎉 Collection Complete! All ${totalCards} cards collected!`;
-    } else {
-        totalCardCount.textContent = `Remaining Cards: ${remaining} / ${totalCards}`;
-    }
+    totalCardCount.textContent = remaining === 0
+        ? `🎉 Collection Complete! All ${totalCards} cards collected!`
+        : `Remaining Cards: ${remaining} / ${totalCards}`;
 });

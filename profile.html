@@ -49,10 +49,14 @@
                 const badgeContainer = document.getElementById('award-container');
                 const badgeCountText = document.getElementById('collected-badge-count');
                 const badgeRank = document.getElementById('badge-rank');
+                const totalBadgeCount = document.getElementById('total-badge-count');
 
                 const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
+                const totalBadgesAvailable = 26; // Adjust this if you add more in the future
 
+                // ✅ Set dynamic badge count
                 badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
+                totalBadgeCount.textContent = `Total Badges Available: ${earnedBadges.length} / ${totalBadgesAvailable}`;
 
                 function getRank(count) {
                     if (count === 0) return 'Bubble Beginner';
@@ -64,18 +68,18 @@
 
                 badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
 
+                // 🏅 Render earned badges
                 if (earnedBadges.length === 0) {
                     badgeContainer.innerHTML = "<p>No badges earned yet. Play the Snap game to unlock some!</p>";
                 } else {
+                    badgeContainer.innerHTML = "";
                     earnedBadges.forEach((badgePath) => {
                         const badge = document.createElement('div');
                         badge.classList.add('badge');
-
                         badge.innerHTML = `
-              <img src="${badgePath}" alt="Badge Image">
-              <div class="badge-label">${badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ')}</div>
-            `;
-
+                                    <img src="${badgePath}" alt="Badge Image">
+                                    <div class="badge-label">${badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ')}</div>
+                                `;
                         badgeContainer.appendChild(badge);
                     });
                 }
