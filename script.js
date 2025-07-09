@@ -185,11 +185,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const badgeContainer = document.getElementById("badge-container");
     if (badgeContainer) {
+        // Clear previous badges if they exist
+        badgeContainer.innerHTML = "";
+
         const badges = [
             { threshold: 5, label: "Mini Snapper", icon: "badge_5.png" },
             { threshold: 10, label: "Bubble Collector", icon: "badge_10.png" },
             { threshold: 20, label: "Reef Master", icon: "badge_20.png" },
-            { threshold: 25, label: "Grumpy Legend", icon: "badge_all.png" }
+            { threshold: 26, label: "Grumpy Legend", icon: "badge_all.png" }
         ];
 
         badges.forEach(badge => {
@@ -197,10 +200,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const badgeEl = document.createElement("div");
             badgeEl.className = "badge";
             badgeEl.innerHTML = `
-        <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
-        <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
-      `;
+      <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
+      <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
+    `;
             badgeContainer.appendChild(badgeEl);
         });
     }
-});
+})
