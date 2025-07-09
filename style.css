@@ -462,7 +462,7 @@ h2 i.fas.fa-medal {
 }
 
 .books-background {
-    background: url('books/books_page_bg.png') no-repeat center center;
+    background: url('static/books/books_page_bg.png') no-repeat center center;
     background-size: cover;
     min-height: 100vh;
     padding: 40px 20px;
