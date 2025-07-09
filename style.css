@@ -616,3 +616,31 @@ h2 i.fas.fa-medal {
 .email-button:hover {
     background-color: #1f4e87;
 }
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffffcc;
+    border: 2px solid #FFD700;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #3CB371;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}

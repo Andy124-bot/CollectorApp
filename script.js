@@ -115,10 +115,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mainContainer = document.getElementById("star-card-collection");
     const awardContainer = document.getElementById("award-collection");
-
     const collected = JSON.parse(localStorage.getItem("collectedCards")) || [];
     const collectedUnique = [...new Set(collected)];
     const showOnlyCollected = false;
+
+    // Clear containers before rebuilding
+    if (mainContainer) mainContainer.innerHTML = "";
+    if (awardContainer) awardContainer.innerHTML = "";
 
     characters.forEach(name => {
         const isAward = name.includes("_award");
@@ -134,16 +137,16 @@ document.addEventListener("DOMContentLoaded", () => {
         card.dataset.name = displayName;
 
         card.innerHTML = `
-      <div class="card-inner" title="${isCollected ? 'Unlocked!' : 'Locked. Match to earn.'}">
-        <div class="card-front">
-          <img src="${getImagePath(name)}" alt="${displayName}">
-          <div class="card-name">${displayName}</div>
+        <div class="card-inner" title="${isCollected ? 'Unlocked!' : 'Locked. Match to earn.'}">
+          <div class="card-front">
+            <img src="${getImagePath(name)}" alt="${displayName}">
+            <div class="card-name">${displayName}</div>
+          </div>
+          <div class="card-back">
+            <img src="Gold_Star_Cards/card-back.png" alt="Card back">
+          </div>
         </div>
-        <div class="card-back">
-          <img src="Gold_Star_Cards/card-back.png" alt="Card back">
-        </div>
-      </div>
-    `;
+      `;
 
         card.addEventListener("click", () => {
             card.classList.toggle("flipped");
@@ -174,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const favoritesContainer = document.getElementById("favorites-container");
     if (favoritesContainer) {
+        favoritesContainer.innerHTML = "";
         collectedUnique.slice(0, 3).forEach(name => {
             const card = document.createElement("img");
             card.src = getImagePath(name);
@@ -185,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const badgeContainer = document.getElementById("badge-container");
     if (badgeContainer) {
-        // Clear previous badges if they exist
         badgeContainer.innerHTML = "";
 
         const badges = [
@@ -200,10 +203,26 @@ document.addEventListener("DOMContentLoaded", () => {
             const badgeEl = document.createElement("div");
             badgeEl.className = "badge";
             badgeEl.innerHTML = `
-      <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
-      <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
-    `;
+          <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
+          <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
+        `;
             badgeContainer.appendChild(badgeEl);
         });
     }
-})
+
+    function checkCompletionAndShowPopup() {
+        const totalStarCards = characterCards.length;
+        const matchedStarCards = collectedUnique.filter(name => characterCards.includes(name));
+        if (matchedStarCards.length === totalStarCards) {
+            document.getElementById("completion-popup").classList.remove("hidden");
+        }
+    }
+
+    function closePopup() {
+        document.getElementById("completion-popup").classList.add("hidden");
+    }
+
+    // Run the check once cards are loaded
+    checkCompletionAndShowPopup();
+
+});
