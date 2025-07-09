@@ -52,7 +52,11 @@
                 const totalBadgeCount = document.getElementById('total-badge-count');
 
                 const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
-                const totalBadgesAvailable = 26; // Adjust this if you add more in the future
+                const totalBadgesDesigned = 26;
+                const remainingBadges = totalBadgesDesigned - earnedBadges.length;
+
+                badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
+                totalBadgeCount.textContent = `Remaining Badges: ${remainingBadges} / ${totalBadgesDesigned}`;
 
                 // ✅ Set dynamic badge count
                 badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
