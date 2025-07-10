@@ -200,6 +200,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         badges.forEach(badge => {
             const unlocked = collectedUnique.length >= badge.threshold;
+            if (unlocked && !document.getElementById(`badge-${badge.label}`)) {
+                // 🎉 Confetti celebration for new badge
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
             const badgeEl = document.createElement("div");
             badgeEl.className = "badge";
             badgeEl.innerHTML = `

@@ -274,22 +274,26 @@
 }
 
 /*  BADGES PAGE */
+#badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
 .badge {
     width: 120px;
+    height: 120px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    /* Adds space between image and label */
+    margin-bottom: 0px;
 }
 
 .badge img {
-    width: 150px;
-    height: 220px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    border-radius: 50%;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
 }
 
 .badge img:hover {
