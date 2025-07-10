@@ -260,4 +260,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(container);
         setTimeout(() => container.remove(), 2500);
     }
+
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        // Confetti celebration 🎉
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
 })

@@ -69,4 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
     totalCardCount.textContent = remaining === 0
         ? `🎉 Collection Complete! All ${totalCards} cards collected!`
         : `Remaining Cards: ${remaining} / ${totalCards}`;
+
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        // Confetti celebration 🎉
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
 });

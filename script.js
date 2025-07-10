@@ -225,4 +225,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Run the check once cards are loaded
     checkCompletionAndShowPopup();
 
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        // Confetti celebration 🎉
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+
 });
