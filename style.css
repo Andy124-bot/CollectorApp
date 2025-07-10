@@ -132,9 +132,10 @@
 #award-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
+    gap: 16px;
+    /* Adjust spacing as you like */
+    justify-content: flex-start;
+    /* Align items to the left */
 }
 
 #award-collection {
@@ -654,4 +655,27 @@ h2 i.fas.fa-medal {
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    z-index: 1000;
+    text-align: center;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-weight: bold;
 }

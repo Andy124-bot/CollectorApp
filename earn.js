@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSpinTimer();
         setInterval(updateSpinTimer, 60000);
 
+
         // 🔐 Spin lock checker
         function canSpinToday() {
             const lastSpin = parseInt(localStorage.getItem("lastSpinTimestamp") || "0", 10);
@@ -192,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
         }
 
+        // 🌀 Spin logic
         spinButton.addEventListener("click", () => {
             if (!canSpinToday()) return;
 
@@ -208,15 +210,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 const path = `Gold_Star_Cards/${prize}`;
 
                 let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+                let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+
                 if (!earned.includes(prize)) {
                     earned.push(prize);
                     localStorage.setItem("earnedStarCards", JSON.stringify(earned));
-                }
 
-                spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
-                unlockedCard.innerHTML = `
-          <img src="${path}" alt="You won ${prize}" class="card-preview glow">
-        `;
+                    spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
+                    unlockedCard.innerHTML = `
+              <img src="${path}" alt="You won ${prize}" class="card-preview glow">
+            `;
+                } else {
+                    // 🏅 Fallback: award a random badge
+                    const available = badgePool.filter(path => !earnedBadges.includes(path));
+                    const randomBadge = available[Math.floor(Math.random() * available.length)];
+                    earnedBadges.push(randomBadge);
+                    localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
+
+                    unlockedCard.innerHTML = `
+              <h3>🎉 A badge won! Check your profile page!</h3>
+              <img src="${randomBadge}" alt="New Badge"
+                style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
+            `;
+                }
 
                 launchConfetti();
                 updateSpinTimer();
@@ -227,7 +243,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 1600);
             }, 4100);
         });
+
+        // 🎊 Confetti Effect
+        function launchConfetti() {
+            const container = document.createElement("div");
+            container.style.position = "absolute";
+            container.style.top = "0";
+            container.style.left = "0";
+            container.style.width = "100%";
+            container.style.height = "100%";
+            container.style.pointerEvents = "none";
+            container.style.zIndex = "9999";
+
+            for (let i = 0; i < 30; i++) {
+                const piece = document.createElement("div");
+                piece.className = "confetti-piece";
+                piece.style.position = "absolute";
+                piece.style.width = "10px";
+                piece.style.height = "10px";
+                piece.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                piece.style.left = `${Math.random() * 100}%`;
+                piece.style.top = `${Math.random() * -20}px`;
+                piece.style.opacity = "1";
+                piece.style.borderRadius = "50%";
+                piece.style.animation = "confetti-fall 2s ease-out forwards";
+                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+                container.appendChild(piece);
+            }
+
+            document.body.appendChild(container);
+            setTimeout(() => container.remove(), 2500);
+        }
     }
+
 
     // === 🎊 Confetti Effect ===
     function launchConfetti() {
@@ -261,15 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => container.remove(), 2500);
     }
 
-    if (!earnedStarCards.includes(cardName)) {
-        earnedStarCards.push(cardName);
-        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
 
-        // Confetti celebration 🎉
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-    }
+
+
 })

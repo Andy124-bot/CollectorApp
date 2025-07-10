@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
     const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
-    const totalCards = 26; // Adjust if your card list grows
+    const totalCards = 26;
 
     // 🏅 Update badge count
     badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 🧜‍♂️ Show badge rank
     badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
 
-    // Render earned badges
+    // 🥇 Render earned badges
     badgeContainer.innerHTML = "";
     if (earnedBadges.length === 0) {
         badgeContainer.innerHTML = "<p>No badges earned yet. Play the Snap game to unlock some!</p>";
@@ -34,14 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
             badge.classList.add('badge');
             const name = badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ');
             badge.innerHTML = `
-          <img src="${badgePath}" alt="${name}">
-          <div class="badge-label">${name}</div>
-        `;
+              <img src="${badgePath}" alt="${name}">
+              <div class="badge-label">${name}</div>
+            `;
+
+            // ✅ Add popup logic to each badge
+            badge.addEventListener("click", () => {
+                const popup = document.getElementById("badge-popup");
+                popup.querySelector("h2").textContent = "🎉 Great Work!";
+                popup.querySelector("p").textContent = `You won the "${name}" badge!`;
+                popup.classList.remove("hidden");
+            });
+
             badgeContainer.appendChild(badge);
         });
     }
 
-    // Render Gold Star Cards
+    // 🎴 Render Gold Star Cards
     collectedStarContainer.innerHTML = "";
     const remaining = totalCards - earnedStarCards.length;
 
@@ -53,35 +62,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement("div");
             card.className = "card collected";
             card.innerHTML = `
-          <div class="card-inner">
-            <div class="card-front">
-              <img src="Gold_Star_Cards/${filename}" alt="${displayName}">
-              <div class="card-name">${displayName}</div>
-            </div>
-          </div>
-        `;
+              <div class="card-inner">
+                <div class="card-front">
+                  <img src="Gold_Star_Cards/${filename}" alt="${displayName}">
+                  <div class="card-name">${displayName}</div>
+                </div>
+              </div>
+            `;
             collectedStarContainer.appendChild(card);
         });
     }
 
-    // 🎯 Card collection stats
+    // 📊 Card collection stats
     collectedCardCount.textContent = `Collected Cards: ${earnedStarCards.length}`;
     totalCardCount.textContent = remaining === 0
         ? `🎉 Collection Complete! All ${totalCards} cards collected!`
         : `Remaining Cards: ${remaining} / ${totalCards}`;
 
+    // 🎯 Unlock card + confetti
     function unlockStarCard(cardName) {
         const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
-        if (!earnedStarCards.includes(cardName)) {
+        const alreadyEarned = earnedStarCards.includes(cardName);
+
+        if (!alreadyEarned) {
             earnedStarCards.push(cardName);
             localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
 
             // 🎉 Confetti burst
             confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
+                particleCount: 120,
+                spread: 90,
+                origin: { y: 0.6 },
+                scalar: 1.2
             });
+
+            // Optional popup or sound here
         }
     }
+
+    // ✨ Badge popup close
+    function closeBadgePopup() {
+        document.getElementById("badge-popup").classList.add("hidden");
+    }
+    window.closeBadgePopup = closeBadgePopup;
 });
