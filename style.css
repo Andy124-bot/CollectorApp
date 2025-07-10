@@ -274,12 +274,14 @@
 }
 
 /*  BADGES PAGE */
-#badge-container {
+.badge {
+    width: 120px;
+    text-align: center;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    /* Adds space between image and label */
 }
 
 .badge {
