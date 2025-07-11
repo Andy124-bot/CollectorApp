@@ -176,7 +176,7 @@
     }
 
     50% {
-        filter: brightness(1.4);
+        filter: brightness(1.0);
     }
 
     100% {
@@ -266,6 +266,8 @@
     opacity: 1 !important;
     box-shadow: 0 0 15px gold !important;
     transform: scale(1.05);
+    animation: glitter 1.5s infinite ease-in-out;
+
 }
 
 @keyframes pulse {
