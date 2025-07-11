@@ -5,6 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const collectedStarContainer = document.getElementById('collected-star-cards');
     const collectedCardCount = document.getElementById('collected-card-count');
     const totalCardCount = document.getElementById('total-card-count');
+    document.addEventListener('DOMContentLoaded', () => {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        let musicPlaying = true;
+
+        toggleBtn.addEventListener('click', () => {
+            if (musicPlaying) {
+                bgMusic.pause();
+                toggleBtn.textContent = '🔇 Music On';
+            } else {
+                bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+                toggleBtn.textContent = '🔊 Music Off';
+            }
+            musicPlaying = !musicPlaying;
+        });
+    });
 
     const awardCards = [
         "bon_bon_award.png", "craig_award.png", "dad_gill_award.png", "destiny_award.png",
@@ -121,4 +138,33 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("badge-popup").classList.add("hidden");
     }
     window.closeBadgePopup = closeBadgePopup;
+
+    function stopMusicOnly() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && !bgMusic.paused) {
+            bgMusic.pause();
+            if (toggleBtn) toggleBtn.textContent = '🔇 Music On';
+            console.log("🎵 Background music stopped");
+        } else {
+            console.log("🎵 Music already paused");
+        }
+    }
+    window.stopMusicOnly = stopMusicOnly;
+    function startMusic() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && bgMusic.paused) {
+            bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+            if (toggleBtn) toggleBtn.textContent = '🔊 Music Off';
+            console.log("🎵 Background music started");
+        } else {
+            console.log("🎵 Music already playing");
+        }
+    }
+    window.startMusic = startMusic;
+
+
 });

@@ -6,6 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const spinResult = document.getElementById('spin-result');
     const canvas = document.getElementById('wheel-canvas');
     const spinButton = document.getElementById('spin-button');
+    document.addEventListener('DOMContentLoaded', () => {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        let musicPlaying = true;
+
+        toggleBtn.addEventListener('click', () => {
+            if (musicPlaying) {
+                bgMusic.pause();
+                toggleBtn.textContent = '🔇 Music On';
+            } else {
+                bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+                toggleBtn.textContent = '🔊 Music Off';
+            }
+            musicPlaying = !musicPlaying;
+        });
+    });
 
     const characterImages = [
         'Gold_Star_Cards/grumpy.png', 'Gold_Star_Cards/bon_bon.png', 'Gold_Star_Cards/craig_gold_star.png',
@@ -133,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function drawWheel() {
             const segmentAngle = (2 * Math.PI) / starPrizes.length;
-
             for (let i = 0; i < starPrizes.length; i++) {
                 const angle = i * segmentAngle;
                 ctx.fillStyle = i % 2 === 0 ? '#FDD835' : '#FFF176';
@@ -156,12 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         drawWheel();
 
-        // Start countdown immediately + update every minute
-        updateSpinTimer();
-        setInterval(updateSpinTimer, 60000);
-
-
-        // 🔐 Spin lock checker
         function canSpinToday() {
             const lastSpin = parseInt(localStorage.getItem("lastSpinTimestamp") || "0", 10);
             const now = Date.now();
@@ -176,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         }
 
-        // 🕒 Timer display
         function updateSpinTimer() {
             const timerEl = document.getElementById("spin-timer");
             const lastSpin = parseInt(localStorage.getItem("lastSpinTimestamp") || "0", 10);
@@ -189,70 +198,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
         }
 
-        // Run immediately and refresh every minute
         updateSpinTimer();
         setInterval(updateSpinTimer, 60000);
 
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
-    }
+        // 🌀 Spin logic
+        spinButton.addEventListener("click", () => {
+            if (!canSpinToday()) return;
 
-    // 🌀 Spin logic
-    spinButton.addEventListener("click", () => {
-        if (!canSpinToday()) return;
+            const spinRounds = 5 + Math.floor(Math.random() * 5);
+            const prizeIndex = Math.floor(Math.random() * starPrizes.length);
+            const degreesPerPrize = 360 / starPrizes.length;
+            const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
 
-        const spinRounds = 5 + Math.floor(Math.random() * 5);
-        const prizeIndex = Math.floor(Math.random() * starPrizes.length);
-        const degreesPerPrize = 360 / starPrizes.length;
-        const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
-
-        canvas.style.transition = "transform 4s ease-out";
-        canvas.style.transform = `rotate(${finalRotation}deg)`;
-
-        setTimeout(() => {
-            const prize = starPrizes[prizeIndex];
-            const path = `Gold_Star_Cards/${prize}`;
-
-            let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
-            let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
-
-            if (!earned.includes(prize)) {
-                earned.push(prize);
-                localStorage.setItem("earnedStarCards", JSON.stringify(earned));
-
-                spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
-                unlockedCard.innerHTML = `
-              <img src="${path}" alt="You won ${prize} Check your profile page" class="card-preview glow">
-            `;
-
-                awardBadge(prize.replace(".png", "").replace(/_/g, " "));
-
-            } else {
-                // 🏅 Fallback: award a random badge
-                const available = badgePool.filter(path => !earnedBadges.includes(path));
-                const randomBadge = available[Math.floor(Math.random() * available.length)];
-                earnedBadges.push(randomBadge);
-                localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
-
-                unlockedCard.innerHTML = `
-              <h3>🎉 A badge won! Check your profile page!</h3>
-              <img src="${randomBadge}" alt="New Badge"
-                style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
-            `;
-            }
-
-            launchConfetti();
-            updateSpinTimer();
+            canvas.style.transition = "transform 4s ease-out";
+            canvas.style.transform = `rotate(${finalRotation}deg)`;
 
             setTimeout(() => {
-                const img = document.querySelector('.card-preview');
-                if (img) img.classList.remove('glow');
-            }, 1600);
-        }, 4100);
-    });
+                const prize = starPrizes[prizeIndex];
+                const path = `Gold_Star_Cards/${prize}`;
+
+                let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+                let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+
+                if (!earned.includes(prize)) {
+                    earned.push(prize);
+                    localStorage.setItem("earnedStarCards", JSON.stringify(earned));
+
+                    spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
+                    unlockedCard.innerHTML = `
+                  <img src="${path}" alt="You won ${prize} Check your profile page" class="card-preview glow">
+                `;
+
+                    awardBadge(prize.replace(".png", "").replace(/_/g, " "));
+                } else {
+                    const available = badgePool.filter(path => !earnedBadges.includes(path));
+                    const randomBadge = available[Math.floor(Math.random() * available.length)];
+                    earnedBadges.push(randomBadge);
+                    localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
+
+                    unlockedCard.innerHTML = `
+                  <h3>🎉 A badge won! Check your profile page!</h3>
+                  <img src="${randomBadge}" alt="New Badge"
+                    style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
+                `;
+                }
+
+                launchConfetti();
+                updateSpinTimer();
+
+                setTimeout(() => {
+                    const img = document.querySelector('.card-preview');
+                    if (img) img.classList.remove('glow');
+                }, 1600);
+            }, 4100);
+        });
+    }
 
     // 🎊 Confetti Effect
     function launchConfetti() {
@@ -293,11 +298,40 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set text
         announcement.textContent = `Wow AMAZING! You won ${characterName}'s Gold Star Award Badge!`;
 
-        // Play audio
+        // Ensure audio plays from the start
         audio.currentTime = 0;
-        audio.play();
+        audio.play().catch(err => {
+            console.warn("🔇 Audio blocked:", err);
+
+        });
     }
 
 
+    function stopMusicOnly() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && !bgMusic.paused) {
+            bgMusic.pause();
+            if (toggleBtn) toggleBtn.textContent = '🔇 Music On';
+            console.log("🎵 Background music stopped");
+        } else {
+            console.log("🎵 Music already paused");
+        }
+    }
+    window.stopMusicOnly = stopMusicOnly;
+    function startMusic() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && bgMusic.paused) {
+            bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+            if (toggleBtn) toggleBtn.textContent = '🔊 Music Off';
+            console.log("🎵 Background music started");
+        } else {
+            console.log("🎵 Music already playing");
+        }
+    }
+    window.startMusic = startMusic;
 
 })

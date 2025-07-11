@@ -119,6 +119,25 @@ function awardBadge(cardName) {
 
 // ✅ Page Setup
 document.addEventListener("DOMContentLoaded", () => {
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        let musicPlaying = true;
+
+        toggleBtn.addEventListener('click', () => {
+            if (musicPlaying) {
+                bgMusic.pause();
+                toggleBtn.textContent = '🔇 Music On';
+            } else {
+                bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+                toggleBtn.textContent = '🔊 Music Off';
+            }
+            musicPlaying = !musicPlaying;
+        });
+    });
+
     const characterCards = [
         "bon_bon.png", "craig_gold_star.png", "dad_gill.png", "destiny.png",
         "grumpy.png", "happy_grumpy.png", "irene_lightfish.png", "jack_gill.png", "jada.png",
@@ -282,6 +301,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     checkCompletionAndShowPopup();
+
+    function stopMusicOnly() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && !bgMusic.paused) {
+            bgMusic.pause();
+            if (toggleBtn) toggleBtn.textContent = '🔇 Music On';
+            console.log("🎵 Background music stopped");
+        } else {
+            console.log("🎵 Music already paused");
+        }
+    }
+    window.stopMusicOnly = stopMusicOnly;
+    function startMusic() {
+        const bgMusic = document.getElementById('bg-music');
+        const toggleBtn = document.getElementById('toggle-music');
+
+        if (bgMusic && bgMusic.paused) {
+            bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
+            if (toggleBtn) toggleBtn.textContent = '🔊 Music Off';
+            console.log("🎵 Background music started");
+        } else {
+            console.log("🎵 Music already playing");
+        }
+    }
+    window.startMusic = startMusic;
 
 
 });

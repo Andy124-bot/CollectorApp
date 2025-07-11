@@ -515,11 +515,10 @@ h2 i.fas.fa-medal {
 
 #wheel-canvas {
     width: 400px;
-    /* Smaller wheel */
     height: 400px;
     display: block;
-    margin: 0 auto;
-    /* Horizontally center it */
+    margin: 20px auto;
+    /* Adds top/bottom spacing */
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
     transform: rotate(0deg);
