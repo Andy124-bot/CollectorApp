@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
                 unlockedCard.innerHTML = `
-              <img src="${path}" alt="You won ${prize}" class="card-preview glow">
+              <img src="${path}" alt="You won ${prize} Check your profile page" class="card-preview glow">
             `;
             } else {
                 // 🏅 Fallback: award a random badge
