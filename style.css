@@ -170,6 +170,20 @@
     animation: glowPulse 1.5s ease-in-out;
 }
 
+@keyframes glitter {
+    0% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.4);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
 .card.collected img,
 .card.won img,
 .card.earned img {
@@ -177,6 +191,7 @@
     opacity: 1;
     box-shadow: 0 0 12px gold;
     transform: scale(1.05);
+    animation: glitter 1.5s infinite ease-in-out;
 }
 
 .card.earned {
