@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // === 🎴 Gold Star Snap Game ===
     const board = document.getElementById('game-board');
-    const matchCountDisplay = document.getElementById('match-count');
-    const statusText = document.getElementById('status-text');
     const unlockedCard = document.getElementById('unlocked-card');
     const spinResult = document.getElementById('spin-result');
     const canvas = document.getElementById('wheel-canvas');
@@ -34,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let matchCount = 0;
+    const matchCountDisplay = document.getElementById("match-count");
+    const statusText = document.getElementById("status-text");
     const flippedCards = [];
     const cards = [...characterImages, ...characterImages].sort(() => 0.5 - Math.random());
 
@@ -193,92 +193,67 @@ document.addEventListener('DOMContentLoaded', () => {
             timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
         }
 
-        // 🌀 Spin logic
-        spinButton.addEventListener("click", () => {
-            if (!canSpinToday()) return;
+        // Run immediately and refresh every minute
+        updateSpinTimer();
+        setInterval(updateSpinTimer, 60000);
 
-            const spinRounds = 5 + Math.floor(Math.random() * 5);
-            const prizeIndex = Math.floor(Math.random() * starPrizes.length);
-            const degreesPerPrize = 360 / starPrizes.length;
-            const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
+    }
 
-            canvas.style.transition = "transform 4s ease-out";
-            canvas.style.transform = `rotate(${finalRotation}deg)`;
+    // 🌀 Spin logic
+    spinButton.addEventListener("click", () => {
+        if (!canSpinToday()) return;
 
-            setTimeout(() => {
-                const prize = starPrizes[prizeIndex];
-                const path = `Gold_Star_Cards/${prize}`;
+        const spinRounds = 5 + Math.floor(Math.random() * 5);
+        const prizeIndex = Math.floor(Math.random() * starPrizes.length);
+        const degreesPerPrize = 360 / starPrizes.length;
+        const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
 
-                let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
-                let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+        canvas.style.transition = "transform 4s ease-out";
+        canvas.style.transform = `rotate(${finalRotation}deg)`;
 
-                if (!earned.includes(prize)) {
-                    earned.push(prize);
-                    localStorage.setItem("earnedStarCards", JSON.stringify(earned));
+        setTimeout(() => {
+            const prize = starPrizes[prizeIndex];
+            const path = `Gold_Star_Cards/${prize}`;
 
-                    spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
-                    unlockedCard.innerHTML = `
+            let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+            let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+
+            if (!earned.includes(prize)) {
+                earned.push(prize);
+                localStorage.setItem("earnedStarCards", JSON.stringify(earned));
+
+                spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
+                unlockedCard.innerHTML = `
               <img src="${path}" alt="You won ${prize}" class="card-preview glow">
             `;
-                } else {
-                    // 🏅 Fallback: award a random badge
-                    const available = badgePool.filter(path => !earnedBadges.includes(path));
-                    const randomBadge = available[Math.floor(Math.random() * available.length)];
-                    earnedBadges.push(randomBadge);
-                    localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
+            } else {
+                // 🏅 Fallback: award a random badge
+                const available = badgePool.filter(path => !earnedBadges.includes(path));
+                const randomBadge = available[Math.floor(Math.random() * available.length)];
+                earnedBadges.push(randomBadge);
+                localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
 
-                    unlockedCard.innerHTML = `
+                unlockedCard.innerHTML = `
               <h3>🎉 A badge won! Check your profile page!</h3>
               <img src="${randomBadge}" alt="New Badge"
                 style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
             `;
-                }
-
-                launchConfetti();
-                updateSpinTimer();
-
-                setTimeout(() => {
-                    const img = document.querySelector('.card-preview');
-                    if (img) img.classList.remove('glow');
-                }, 1600);
-            }, 4100);
-        });
-
-        // 🎊 Confetti Effect
-        function launchConfetti() {
-            const container = document.createElement("div");
-            container.style.position = "absolute";
-            container.style.top = "0";
-            container.style.left = "0";
-            container.style.width = "100%";
-            container.style.height = "100%";
-            container.style.pointerEvents = "none";
-            container.style.zIndex = "9999";
-
-            for (let i = 0; i < 30; i++) {
-                const piece = document.createElement("div");
-                piece.className = "confetti-piece";
-                piece.style.position = "absolute";
-                piece.style.width = "10px";
-                piece.style.height = "10px";
-                piece.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-                piece.style.left = `${Math.random() * 100}%`;
-                piece.style.top = `${Math.random() * -20}px`;
-                piece.style.opacity = "1";
-                piece.style.borderRadius = "50%";
-                piece.style.animation = "confetti-fall 2s ease-out forwards";
-                piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-
-                container.appendChild(piece);
             }
 
-            document.body.appendChild(container);
-            setTimeout(() => container.remove(), 2500);
-        }
-    }
+            launchConfetti();
+            updateSpinTimer();
 
+            setTimeout(() => {
+                const img = document.querySelector('.card-preview');
+                if (img) img.classList.remove('glow');
+            }, 1600);
+        }, 4100);
+    });
 
-    // === 🎊 Confetti Effect ===
+    // 🎊 Confetti Effect
     function launchConfetti() {
         const container = document.createElement("div");
         container.style.position = "absolute";

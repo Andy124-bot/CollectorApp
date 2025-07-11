@@ -45,52 +45,6 @@
             <p id="total-card-count">Total Cards Available: 26/26</p>
         </section>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const badgeContainer = document.getElementById('award-container');
-                const badgeCountText = document.getElementById('collected-badge-count');
-                const badgeRank = document.getElementById('badge-rank');
-                const totalBadgeCount = document.getElementById('total-badge-count');
-
-                const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
-                const totalBadgesDesigned = 26;
-                const remainingBadges = totalBadgesDesigned - earnedBadges.length;
-
-                badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
-                totalBadgeCount.textContent = `Remaining Badges: ${remainingBadges} / ${totalBadgesDesigned}`;
-
-                // ✅ Set dynamic badge count
-                badgeCountText.textContent = `Collected Badges: ${earnedBadges.length}`;
-                totalBadgeCount.textContent = `Total Badges Available: ${earnedBadges.length} / ${totalBadgesAvailable}`;
-
-                function getRank(count) {
-                    if (count === 0) return 'Bubble Beginner';
-                    if (count < 5) return 'Friendly Fin';
-                    if (count < 10) return 'Reef Rookie';
-                    if (count < 20) return 'Tide Tamer';
-                    return 'Gold-Star Master';
-                }
-
-                badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
-
-                // 🏅 Render earned badges
-                if (earnedBadges.length === 0) {
-                    badgeContainer.innerHTML = "<p>No badges earned yet. Play the Snap game to unlock some!</p>";
-                } else {
-                    badgeContainer.innerHTML = "";
-                    earnedBadges.forEach((badgePath) => {
-                        const badge = document.createElement('div');
-                        badge.classList.add('badge');
-                        badge.innerHTML = `
-                                    <img src="${badgePath}" alt="Badge Image">
-                                    <div class="badge-label">${badgePath.split('/').pop().replace('.png', '').replace(/[_-]/g, ' ')}</div>
-                                `;
-                        badgeContainer.appendChild(badge);
-                    });
-                }
-            });
-        </script>
-
     </main>
 
     <div id="badge-popup" class="popup hidden">

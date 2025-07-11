@@ -89,6 +89,34 @@ window.speechSynthesis.onvoiceschanged = () => {
     speechSynthesis.getVoices();
 };
 
+function awardStarCard(cardName) {
+    const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+}
+
+function awardBadge(cardName) {
+    const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
+    const cleanName = cardName.split('/').pop(); // strips folder path
+
+    if (!earnedBadges.includes(cleanName)) {
+        earnedBadges.push(cleanName);
+        localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+}
+
 // ✅ Page Setup
 document.addEventListener("DOMContentLoaded", () => {
     const characterCards = [
@@ -98,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "maz.png", "maz_hiding.png", "mckenna.png", "mum_gill.png", "ollie.png", "orion.png",
         "pauline.png", "polly.png", "puffy.png", "ronnie.png", "rylee.png"
     ];
-
     const awardCards = [
         "bon_bon_award.png", "craig_award.png", "dad_gill_award.png", "destiny_award.png",
         "grumpy_shark_award.png", "happy_grumpy_shark_award.png", "irene_lightfish_award.png",
@@ -115,17 +142,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mainContainer = document.getElementById("star-card-collection");
     const awardContainer = document.getElementById("award-collection");
+
     const collected = JSON.parse(localStorage.getItem("collectedCards")) || [];
-    const collectedUnique = [...new Set(collected)];
+    const earnedStarCards = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+    const earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+    const normalizedBadges = earnedBadges.map(b => b.split("/").pop());
+
+    const collectedUnique = [...new Set([...collected, ...earnedStarCards])];
     const showOnlyCollected = false;
 
-    // Clear containers before rebuilding
     if (mainContainer) mainContainer.innerHTML = "";
     if (awardContainer) awardContainer.innerHTML = "";
 
     characters.forEach(name => {
         const isAward = name.includes("_award");
-        const isCollected = collectedUnique.includes(name);
+        const isCollected = isAward
+            ? normalizedBadges.includes(name)
+            : collectedUnique.includes(name);
+
         if (!isCollected && showOnlyCollected) return;
 
         const container = isAward ? awardContainer : mainContainer;
@@ -133,28 +167,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const displayName = name.replace(".png", "").replace(/_/g, " ");
         const card = document.createElement("div");
-        card.className = `card ${isAward ? "award-card" : ""} ${isCollected ? "collected" : "locked"}`;
+        card.className = "card";
         card.dataset.name = displayName;
 
+        if (isAward) {
+            card.classList.add("award-card");
+            if (isCollected) {
+                card.classList.add("collected", "won", "earned");
+            } else {
+                card.classList.add("locked");
+            }
+        } else {
+            if (isCollected) {
+                card.classList.add("collected", "won");
+            } else {
+                card.classList.add("locked");
+            }
+        }
+
+        // Remove locked if accidentally retained on earned
+        if (card.classList.contains("earned") && card.classList.contains("locked")) {
+            card.classList.remove("locked");
+        }
+
         card.innerHTML = `
-        <div class="card-inner" title="${isCollected ? 'Unlocked!' : 'Locked. Match to earn.'}">
-          <div class="card-front">
-            <img src="${getImagePath(name)}" alt="${displayName}">
-            <div class="card-name">${displayName}</div>
-          </div>
-          <div class="card-back">
-            <img src="Gold_Star_Cards/card-back.png" alt="Card back">
-          </div>
+      <div class="card-inner" title="${isCollected ? 'Unlocked!' : 'Locked. Match to earn.'}">
+        <div class="card-front">
+          <img src="${getImagePath(name)}" alt="${displayName}">
+          <div class="card-name">${displayName}</div>
         </div>
-      `;
+        <div class="card-back">
+          <img src="Gold_Star_Cards/card-back.png" alt="Card back">
+        </div>
+      </div>
+    `;
 
         card.addEventListener("click", () => {
             card.classList.toggle("flipped");
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-            if (isCollected) {
-                speakCardContents(card);
-            }
+            if (isCollected) speakCardContents(card);
         });
 
         container.appendChild(card);
@@ -190,7 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const badgeContainer = document.getElementById("badge-container");
     if (badgeContainer) {
         badgeContainer.innerHTML = "";
-
         const badges = [
             { threshold: 5, label: "Mini Snapper", icon: "badge_5.png" },
             { threshold: 10, label: "Bubble Collector", icon: "badge_10.png" },
@@ -201,7 +252,6 @@ document.addEventListener("DOMContentLoaded", () => {
         badges.forEach(badge => {
             const unlocked = collectedUnique.length >= badge.threshold;
             if (unlocked && !document.getElementById(`badge-${badge.label}`)) {
-                // 🎉 Confetti celebration for new badge
                 confetti({
                     particleCount: 100,
                     spread: 70,
@@ -212,9 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const badgeEl = document.createElement("div");
             badgeEl.className = "badge";
             badgeEl.innerHTML = `
-          <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
-          <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
-        `;
+        <img src="BADGES/${unlocked ? badge.icon : 'locked_badge.png'}" alt="${badge.label}">
+        <div class="badge-label">${unlocked ? badge.label : "Locked"}</div>
+      `;
             badgeContainer.appendChild(badgeEl);
         });
     }
@@ -231,21 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("completion-popup").classList.add("hidden");
     }
 
-    // Run the check once cards are loaded
     checkCompletionAndShowPopup();
 
-    function awardStarCard(cardName) {
-        const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
-        if (!earnedStarCards.includes(cardName)) {
-            earnedStarCards.push(cardName);
-            localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
-
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
-    }
 
 });
