@@ -36,6 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     badgeRank.textContent = `Badge Rank: ${getRank(earnedBadges.length)}`;
 
+    const totalBadgeCount = document.getElementById('total-badge-count');
+    const remainingBadges = awardCards.length - earnedBadges.length;
+
+    totalBadgeCount.textContent =
+        remainingBadges === 0
+            ? `🎉 Collection Complete! All ${awardCards.length} badges earned!`
+            : `Remaining Badges: ${remainingBadges} / ${awardCards.length}`;
+
     // 🥇 Render earned badges
     badgeContainer.innerHTML = "";
     if (earnedBadges.length === 0) {
