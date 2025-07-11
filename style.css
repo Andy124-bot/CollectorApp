@@ -176,7 +176,7 @@
     }
 
     50% {
-        filter: brightness(1.0);
+        filter: brightness(1.2);
     }
 
     100% {
@@ -266,7 +266,7 @@
     opacity: 1 !important;
     box-shadow: 0 0 15px gold !important;
     transform: scale(1.05);
-    animation: glitter 1.5s infinite ease-in-out;
+
 
 }
 
@@ -456,7 +456,7 @@
     opacity: 1;
     transform: scale(1.05);
     box-shadow: 0 0 10px gold;
-    border-radius: 6px;
+    border-radius: 46px;
 }
 
 .badge:not(.earned) img {
