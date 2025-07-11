@@ -13,6 +13,10 @@
     <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
     <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
 
+    <audio id="badgeAudio" src="audio/won_award_badge.mp3" preload="auto"></audio>
+    <div id="announcementText" class="announcement" aria-live="assertive">
+    </div>
+
     <nav class="main-nav">
         <ul>
             <li><a href="index.html">🃏 Home</a></li>
@@ -30,10 +34,8 @@
 
         <p id="spin-timer" class="spin-timer">🕒 Next spin in: 23h 59m</p>
 
-        <p id="spin-timer" style="text-align: center; font-weight: bold; margin-top: 10px;"></p>
-        <div id="wheel-container">
-            <canvas id="wheel-canvas" width="300" height="300"></canvas>
-        </div>
+        <canvas id="wheel-canvas" width="500" height="500"></canvas>
+
 
         <section id="snap-game">
             <h2>🧠 Match the Cards to Unlock Gold-Star Awards!</h2>

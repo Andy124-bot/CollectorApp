@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
     // === 🎴 Gold Star Snap Game ===
     const board = document.getElementById('game-board');
     const unlockedCard = document.getElementById('unlocked-card');
@@ -102,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         matchCount++;
                         matchCountDisplay.textContent = matchCount;
                         statusText.textContent = `✅ Matched: ${getCardName(first.image)}!`;
-                        flippedCards.length = 0;
+                        flippedCards.splice(0, flippedCards.length);
 
                         if (matchCount === characterImages.length) {
                             statusText.textContent = `🎉 You've matched all Gold-Star cards!`;
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         first.element.classList.remove('flipped');
                         second.element.classList.remove('flipped');
-                        flippedCards.length = 0;
+                        flippedCards.splice(0, flippedCards.length);
                         statusText.textContent = 'Flip two cards to find a match.';
                     }, 1000);
                 }
@@ -188,9 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            timerEl.textContent = `🕒 Next spin in: ${hours}h ${minutes}m`;
         }
 
         // Run immediately and refresh every minute
@@ -229,6 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 unlockedCard.innerHTML = `
               <img src="${path}" alt="You won ${prize} Check your profile page" class="card-preview glow">
             `;
+
+                awardBadge(prize.replace(".png", "").replace(/_/g, " "));
+
             } else {
                 // 🏅 Fallback: award a random badge
                 const available = badgePool.filter(path => !earnedBadges.includes(path));
@@ -285,6 +286,17 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => container.remove(), 2500);
     }
 
+    function awardBadge(characterName) {
+        const audio = document.getElementById('badgeAudio');
+        const announcement = document.getElementById('announcementText');
+
+        // Set text
+        announcement.textContent = `Wow AMAZING! You won ${characterName}'s Gold Star Award Badge!`;
+
+        // Play audio
+        audio.currentTime = 0;
+        audio.play();
+    }
 
 
 

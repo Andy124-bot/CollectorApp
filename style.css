@@ -191,7 +191,7 @@
     opacity: 1;
     box-shadow: 0 0 12px gold;
     transform: scale(1.05);
-    animation: glitter 1.5s infinite ease-in-out;
+
 }
 
 .card.earned {
@@ -457,6 +457,7 @@
     transform: scale(1.05);
     box-shadow: 0 0 10px gold;
     border-radius: 46px;
+    animation: glitter 1.5s infinite ease-in-out;
 }
 
 .badge:not(.earned) img {
@@ -513,6 +514,12 @@ h2 i.fas.fa-medal {
 }
 
 #wheel-canvas {
+    width: 400px;
+    /* Smaller wheel */
+    height: 400px;
+    display: block;
+    margin: 0 auto;
+    /* Horizontally center it */
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
     transform: rotate(0deg);
