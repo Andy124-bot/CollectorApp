@@ -60,14 +60,24 @@
                         </label>
                         <div class="poll-box">
                             <h3>📊 Help Us Choose a Title!</h3>
-                            <form id="titlePoll">
-                                <label><input type="radio" name="sharkTitle" value="Grumpy Shark"> Keep Title as Grumpy
-                                    Shark</label><br>
-                                <label><input type="radio" name="sharkTitle" value="Happy Shark"> Change Title to Happy
-                                    Shark</label><br>
-                                <label><input type="radio" name="sharkTitle" value="Sharkey and Friends"> Change Title
-                                    to Sharkey and
-                                    Friends</label><br>
+                            <form action="https://formspree.io/f/movlaqjr" method="POST" class="poll-box">
+                                <h3>📊 Help Us Choose a Title!</h3>
+
+                                <label>
+                                    <input type="radio" name="sharkTitle" value="Grumpy Shark" required>
+                                    Keep Title as Grumpy Shark
+                                </label><br>
+
+                                <label>
+                                    <input type="radio" name="sharkTitle" value="Happy Shark">
+                                    Change Title to Happy Shark
+                                </label><br>
+
+                                <label>
+                                    <input type="radio" name="sharkTitle" value="Sharkey and Friends">
+                                    Change Title to Sharkey and Friends
+                                </label><br>
+
                                 <button type="submit">Cast Your Vote</button>
                             </form>
                             <div id="pollResult" class="poll-result"></div>
