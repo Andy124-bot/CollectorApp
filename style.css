@@ -848,6 +848,14 @@ h2 i.fas.fa-medal {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-family: 'Segoe UI', sans-serif;
     color: #004d40;
+    position: absolute;
+    top: 20px;
+    /* Moves it higher */
+    left: 10px;
+    /* Nudges it leftward */
+    z-index: 10;
+    /* Keeps it above other elements just in case */
+    position: static;
 }
 
 .poll-box h3 {
