@@ -329,5 +329,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     window.startMusic = startMusic;
 
+    document.getElementById("titlePoll").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const choice = document.querySelector('input[name="sharkTitle"]:checked');
+        const resultBox = document.getElementById("pollResult");
+
+        if (choice) {
+            resultBox.textContent = `Thanks for voting! You chose: "${choice.value}"`;
+        } else {
+            resultBox.textContent = "Please select an option before submitting.";
+        }
+    });
+
 
 });
