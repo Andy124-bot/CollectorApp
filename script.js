@@ -341,5 +341,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    function readAloud(text) {
+        if (window.AndroidTTS && AndroidTTS.speakText) {
+            AndroidTTS.speakText(text);
+        } else {
+            console.log("TTS interface not available");
+        }
+    }
+
 
 });

@@ -25,3 +25,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+webView.addJavascriptInterface(new WebAppInterface(), "AndroidTTS");
+
+@JavascriptInterface
+public void speakText(String text) {
+    Toast.makeText(context, "Speaking: " + text, Toast.LENGTH_SHORT).show();  // 'context' from constructor
+    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+}
