@@ -204,59 +204,118 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         updateSpinTimer();
-        setInterval(updateSpinTimer, 60000);
+setInterval(updateSpinTimer, 60000);
 
-        // 🌀 Spin logic
-        spinButton.addEventListener("click", () => {
-            if (!canSpinToday()) return;
+// 🌀 Spin logic
+spinButton.addEventListener("click", () => {
+    if (!canSpinToday()) return;
 
-            const spinRounds = 5 + Math.floor(Math.random() * 5);
-            const prizeIndex = Math.floor(Math.random() * starPrizes.length);
-            const degreesPerPrize = 360 / starPrizes.length;
-            const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
+    const spinRounds = 5 + Math.floor(Math.random() * 5);
+    const prizeIndex = Math.floor(Math.random() * starPrizes.length);
+    const degreesPerPrize = 360 / starPrizes.length;
+    const finalRotation = 360 * spinRounds - (prizeIndex * degreesPerPrize) - degreesPerPrize / 2;
 
-            canvas.style.transition = "transform 4s ease-out";
-            canvas.style.transform = `rotate(${finalRotation}deg)`;
+    canvas.style.transition = "transform 4s ease-out";
+    canvas.style.transform = `rotate(${finalRotation}deg)`;
 
-            setTimeout(() => {
-                const prize = starPrizes[prizeIndex];
-                const path = `Gold_Star_Cards/${prize}`;
+    setTimeout(() => {
+        const prize = starPrizes[prizeIndex];
+        const path = `Gold_Star_Cards/${prize}`;
+        const cleanPrize = prize.replace(".png", "").replace(/_/g, " ");
 
-                let earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
-                let earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
+        const earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+        const earnedBadges = JSON.parse(localStorage.getItem("earnedBadges")) || [];
 
-                if (!earned.includes(prize)) {
-                    earned.push(prize);
-                    localStorage.setItem("earnedStarCards", JSON.stringify(earned));
+        if (!earned.includes(prize)) {
+            // ✅ Trigger Gold Star reward
+            awardStarCard(cleanPrize);
 
-                    spinResult.textContent = `🎉 You won: ${prize.replace(".png", "").replace(/_/g, " ")}!`;
-                    unlockedCard.innerHTML = `
-                  <img src="${path}" alt="You won ${prize} Check your profile page" class="card-preview glow">
-                `;
+            spinResult.textContent = `🎉 You won: ${cleanPrize}!`;
+            unlockedCard.innerHTML = `
+                <img src="${path}" alt="You won ${prize}. Check your profile page" class="card-preview glow">
+            `;
 
-                    awardBadge(prize.replace(".png", "").replace(/_/g, " "));
-                } else {
-                    const available = badgePool.filter(path => !earnedBadges.includes(path));
-                    const randomBadge = available[Math.floor(Math.random() * available.length)];
-                    earnedBadges.push(randomBadge);
-                    localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
+            // Optional custom handler
+            if (typeof awards === "function") awards(cleanPrize);
+        } else {
+            // ✅ Fallback badge logic
+            const available = badgePool.filter(path => !earnedBadges.includes(path));
+            const randomBadge = available[Math.floor(Math.random() * available.length)];
+            earnedBadges.push(randomBadge);
+            localStorage.setItem("earnedBadges", JSON.stringify(earnedBadges));
 
-                    unlockedCard.innerHTML = `
-                  <h3>🎉 A badge won! Check your profile page!</h3>
-                  <img src="${randomBadge}" alt="New Badge"
+            const badgeName = randomBadge.split('/').pop().replace(".png", "").replace(/_/g, " ");
+
+            unlockedCard.innerHTML = `
+                <h3>🎉 A badge won! Check your profile page!</h3>
+                <img src="${randomBadge}" alt="New Badge"
                     style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
-                `;
-                }
+            `;
 
-                launchConfetti();
-                updateSpinTimer();
+            narrateReward("badge", badgeName);
+        }
 
-                setTimeout(() => {
-                    const img = document.querySelector('.card-preview');
-                    if (img) img.classList.remove('glow');
-                }, 1600);
-            }, 4100);
+        launchConfetti();
+        updateSpinTimer();
+
+        setTimeout(() => {
+            const img = document.querySelector('.card-preview');
+            if (img) img.classList.remove('glow');
+        }, 1600);
+    }, 4100);
+});
+
+// ✅ Narration Helpers
+function narrateReward(type, name) {
+    let message = "";
+
+    if (type === "star") {
+        message = `You've earned a Gold Star card for ${name}!`;
+    } else if (type === "badge") {
+        message = `You've unlocked a new badge: ${name}.`;
+    } else {
+        message = `You've earned a new reward: ${name}.`;
+    }
+
+    speakText(message, type);
+}
+
+// ✅ Award Star Card
+function awardStarCard(cardName) {
+    const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
+
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        narrateReward("star", cardName);
+
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
         });
+    }
+}
+
+// ✅ Award Badge
+function awardBadge(cardName) {
+    const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
+    const cleanName = cardName.split('/').pop();
+
+    if (!earnedBadges.includes(cleanName)) {
+        earnedBadges.push(cleanName);
+        localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
+
+        narrateReward("badge", cleanName);
+
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+}
     }
 
     // 🎊 Confetti Effect
