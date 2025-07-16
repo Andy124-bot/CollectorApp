@@ -1,5 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ✅ Voice Initialization – load voices as soon as available
+window.speechSynthesis.onvoiceschanged = () => {
+    console.log("✅ Voices initialized:", speechSynthesis.getVoices().length);
+    speechSynthesis.getVoices(); // triggers loading
+};
+
+// ✅ Customize Voice Style by Reward Type
+function getVoiceProfile(type) {
+    if (type === "star") return { rate: 1.2, pitch: 1.4 };
+    if (type === "badge") return { rate: 0.9, pitch: 1.0 };
+    return { rate: 1, pitch: 1 };
+}
+
+// ✅ Speak Text with Dynamic Voice and Retry
+function speakText(message, type = "default") {
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    const trySpeak = () => {
+        const voices = speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang === 'en-AU') || voices[0];
+
+        if (!voice) {
+            console.warn("🗣️ No voice available — retrying...");
+            setTimeout(trySpeak, 100);
+            return;
+        }
+
+        const profile = getVoiceProfile(type);
+        utterance.voice = voice;
+        utterance.lang = voice.lang;
+        utterance.rate = profile.rate;
+        utterance.pitch = profile.pitch;
+
+        console.log(`📢 Speaking: "${message}" with voice ${voice.name}`);
+        speechSynthesis.speak(utterance);
+    };
+
+    trySpeak();
+}
     // === 🎴 Gold Star Snap Game ===
     const board = document.getElementById('game-board');
     const unlockedCard = document.getElementById('unlocked-card');
@@ -280,16 +319,23 @@ function narrateReward(type, name) {
     speakText(message, type);
 }
 
-// ✅ Award Star Card
 function awardStarCard(cardName) {
     const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
 
-    const cleanPrize = prize.replace(".png", "").replace(/_/g, " ");
-const earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+    if (!cardName || typeof cardName !== "string") return;
 
-if (!earned.includes(cleanPrize)) {
-    awardStarCard(cleanPrize);
-}
+    if (!earnedStarCards.includes(cardName)) {
+        earnedStarCards.push(cardName);
+        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        narrateReward("star", cardName);
+
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
 }
 
 // ✅ Award Badge
@@ -373,6 +419,7 @@ function awardBadge(cardName) {
         }
     }
     window.stopMusicOnly = stopMusicOnly;
+
     function startMusic() {
         const bgMusic = document.getElementById('bg-music');
         const toggleBtn = document.getElementById('toggle-music');
