@@ -1,39 +1,33 @@
 // ✅ Global Voice Flag
 let isSpeaking = false;
 
-// ✅ Page Narration
-function speakPageText() {
-    stopSpeaking();
+// ✅ Preload Voices
+window.speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+};
 
-    const main = document.querySelector('main');
-    if (!main) return;
-
-    const visibleText = main.innerText || main.textContent || '';
-    if (!visibleText.trim()) return;
-
-    const utterance = new SpeechSynthesisUtterance(visibleText.trim());
-
-    const tryToSpeak = () => {
-        const voices = speechSynthesis.getVoices();
-        const chosen = voices.find(v => v.lang === 'en-AU') || voices[0];
-
-        if (!chosen) {
-            setTimeout(tryToSpeak, 100);
-            return;
-        }
-
-        utterance.voice = chosen;
-        if (chosen.lang) utterance.lang = chosen.lang;
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        isSpeaking = true;
-        utterance.onend = () => isSpeaking = false;
-        speechSynthesis.speak(utterance);
-    };
-
-    tryToSpeak();
+// ✅ Voice Profile Generator
+function getVoiceProfile(type) {
+    if (type === "star") return { rate: 1.2, pitch: 1.4 };
+    if (type === "badge") return { rate: 0.9, pitch: 1.0 };
+    return { rate: 1, pitch: 1 };
 }
-window.speakPageText = speakPageText;
+
+// ✅ Speak Text with Dynamic Voice
+function speakText(message, type = "default") {
+    const utterance = new SpeechSynthesisUtterance(message);
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v => v.lang === 'en-AU') || voices[0];
+    const profile = getVoiceProfile(type);
+
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+    utterance.rate = profile.rate;
+    utterance.pitch = profile.pitch;
+    isSpeaking = true;
+    utterance.onend = () => (isSpeaking = false);
+    speechSynthesis.speak(utterance);
+}
 
 // ✅ Stop Speech
 function stopSpeaking() {
@@ -42,6 +36,19 @@ function stopSpeaking() {
     isSpeaking = false;
 }
 window.stopSpeaking = stopSpeaking;
+
+// ✅ Page Narration
+function speakPageText() {
+    stopSpeaking();
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    const visibleText = main.innerText || main.textContent || '';
+    if (!visibleText.trim()) return;
+
+    speakText(visibleText.trim());
+}
+window.speakPageText = speakPageText;
 
 // ✅ Speak Selected Card
 function startNarration() {
@@ -62,38 +69,34 @@ function speakCardContents(cardElement) {
     const visibleText = cardElement.innerText || cardElement.textContent || '';
     if (!visibleText.trim()) return;
 
-    const utterance = new SpeechSynthesisUtterance(visibleText.trim());
-
-    const tryToSpeak = () => {
-        const voices = speechSynthesis.getVoices();
-        const selected = voices.find(v => v.lang === 'en-AU') || voices[0];
-
-        if (selected) {
-            utterance.voice = selected;
-            utterance.lang = selected.lang;
-            utterance.rate = 1;
-            utterance.pitch = 1;
-            isSpeaking = true;
-            utterance.onend = () => (isSpeaking = false);
-            speechSynthesis.speak(utterance);
-        } else {
-            setTimeout(tryToSpeak, 100);
-        }
-    };
-
-    tryToSpeak();
+    speakText(visibleText.trim());
 }
 
-// ✅ Preload Voices
-window.speechSynthesis.onvoiceschanged = () => {
-    speechSynthesis.getVoices();
-};
+// ✅ Narrate Reward
+function narrateReward(type, name) {
+    let message = "";
 
+    if (type === "star") {
+        message = `You've earned a Gold Star card for ${name}!`;
+    } else if (type === "badge") {
+        message = `You've unlocked a new badge: ${name}.`;
+    } else {
+        message = `You've earned a new reward: ${name}.`;
+    }
+
+    speakText(message, type);
+}
+
+// ✅ Award Star Card
 function awardStarCard(cardName) {
     const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
+
     if (!earnedStarCards.includes(cardName)) {
         earnedStarCards.push(cardName);
         localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+
+        narrateReward("star", cardName);
+
         confetti({
             particleCount: 100,
             spread: 70,
@@ -102,13 +105,17 @@ function awardStarCard(cardName) {
     }
 }
 
+// ✅ Award Badge
 function awardBadge(cardName) {
     const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
-    const cleanName = cardName.split('/').pop(); // strips folder path
+    const cleanName = cardName.split('/').pop();
 
     if (!earnedBadges.includes(cleanName)) {
         earnedBadges.push(cleanName);
         localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
+
+        narrateReward("badge", cleanName);
+
         confetti({
             particleCount: 100,
             spread: 70,
@@ -116,6 +123,7 @@ function awardBadge(cardName) {
         });
     }
 }
+
 
 // ✅ Page Setup
 document.addEventListener("DOMContentLoaded", () => {
@@ -154,6 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "mum_gill_award.png", "ollie_award.png", "orion_award.png", "pauline_award.png", "polly_award.png",
         "puffy_award.png", "ronnie_award.png", "rylee_award.png"
     ];
+
+
 
     const characters = [...characterCards, ...awardCards];
     const getImagePath = (filename) =>
