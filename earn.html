@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Earn Grumpy Cards</title>
-    <link rel="stylesheet" href="../../../../../../OneDrive/Desktop/MY%20APPS/GRUMPY%20CARD%20COLLECTOR%20APP/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="confetti.browser.min.js"></script>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
     <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
     <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
 
-    <audio id="badgeAudio" src="../../../../../../OneDrive/Desktop/MY%20APPS/GRUMPY%20CARD%20COLLECTOR%20APP/audio/won_award_badge.mp3" preload="auto"></audio>
+    <audio id="badgeAudio" src="audio/won_award_badge.mp3" preload="auto"></audio>
     <div id="announcementText" class="announcement" aria-live="assertive">
     </div>
 
@@ -31,7 +31,6 @@
         <button id="spin-button">Spin the Reef Wheel</button>
         <div id="spin-result"></div>
         <div id="unlocked-card"></div>
-        <div id="spinCooldownDisplay"></div>
 
         <p id="spin-timer" class="spin-timer">🕒 Next spin in: 23h 59m</p>
 
@@ -56,12 +55,12 @@
     </main>
 
 
-    <audio id="bg-music" src="../../../../../../OneDrive/Desktop/MY%20APPS/GRUMPY%20CARD%20COLLECTOR%20APP/audio/grumpy_song.wav" autoplay loop></audio>
+    <audio id="bg-music" src="audio/grumpy_song.wav"></audio>
     <button onclick="stopMusicOnly()">🛑 Stop Music</button>
     <button onclick="startMusic()">▶️ Play Music</button>
 
 
-    <script src="../../../../../../OneDrive/Desktop/MY%20APPS/GRUMPY%20CARD%20COLLECTOR%20APP/earn.js"></script>
+    <script src="earn.js"></script>
     <script src="/script.js"></script>
 </body>
 

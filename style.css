@@ -161,14 +161,6 @@
     transform: scale(1.08);
 }
 
-.card-preview {
-    margin-top: 15px;
-    width: 160px;
-    border: 2px solid gold;
-    border-radius: 8px;
-    box-shadow: 0 0 12px gold;
-    animation: glowPulse 1.5s ease-in-out;
-}
 
 @keyframes glitter {
     0% {
@@ -320,6 +312,27 @@
     }
 }
 
+button[onclick^="startMusic"],
+button[onclick^="stopMusicOnly"] {
+    background: #81D4FA;
+    color: #01579B;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    margin: 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s;
+}
+
+button[onclick^="startMusic"]:hover {
+    background: #4FC3F7;
+}
+
+button[onclick^="stopMusicOnly"]:hover {
+    background: #FF8A65;
+}
+
 
 
 .main-nav {
@@ -385,26 +398,51 @@
 
 /*  EAR PAGE */
 #spin-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    background-color: #00bcd4;
-    color: white;
-    border: none;
-    border-radius: 8px;
+    background: linear-gradient(to bottom, #FFEB3B, #FFC107);
+    border: 3px solid #F57F17;
+    color: #5D4037;
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    border-radius: 12px;
     cursor: pointer;
-    margin: 20px;
-    transition: background-color 0.3s;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 #spin-button:hover {
-    background-color: #0097a7;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #FFC107;
 }
 
 #spin-result {
-    font-size: 1.1em;
+    font-size: 2rem;
+    color: #4CAF50;
     font-weight: bold;
-    margin-top: 10px;
     text-align: center;
+    margin: 15px 0;
+}
+
+.card-preview {
+    animation: bounce-in 1s ease;
+    border: 5px solid gold;
+    border-radius: 12px;
+    box-shadow: 0 0 15px gold;
+    margin-top: 10px;
+}
+
+@keyframes bounce-in {
+    0% {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 #unlocked-card img {

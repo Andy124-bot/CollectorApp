@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const diff = nextSpin - now;
 
             if (diff <= 0) {
-                timerEl.textContent = "✅ You can spin now!";
+                timerEl.textContent = "";
                 return;
             }
 
@@ -284,18 +284,12 @@ function narrateReward(type, name) {
 function awardStarCard(cardName) {
     const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
 
-    if (!earnedStarCards.includes(cardName)) {
-        earnedStarCards.push(cardName);
-        localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
+    const cleanPrize = prize.replace(".png", "").replace(/_/g, " ");
+const earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
 
-        narrateReward("star", cardName);
-
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-    }
+if (!earned.includes(cleanPrize)) {
+    awardStarCard(cleanPrize);
+}
 }
 
 // ✅ Award Badge
