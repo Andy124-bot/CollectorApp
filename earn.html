@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <title>Earn Grumpy Cards</title>
     <link rel="stylesheet" href="style.css">
-    <script src="confetti.browser.min.js"></script>
 
     <meta property="og:title" content="Grumpy Card Collector" />
     <meta property="og:description" content="Spin the Reef Wheel to collect Gold-Star cards and magical badges!" />
     <meta property="og:url" content="https://musical-llama-845411.netlify.app/" />
     <meta property="og:image" content="https://musical-llama-845411.netlify.app/assets/share-preview.png" />
     <meta property="og:type" content="website" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
     
 </head>
 
@@ -35,7 +35,7 @@
 
     <main>
         <h1>🎰 Spin to Win a Gold-Star Card!</h1>
-        <button id="spin-button">Spin the Reef Wheel</button>
+        <button id="spin-button" aria-label="Spin the Reef Wheel and unlock a prize!">Spin the Reef Wheel</button>
         <div id="spin-result"></div>
         <div id="unlocked-card"></div>
 
@@ -43,15 +43,16 @@
 
         <canvas id="wheel-canvas" width="500" height="500"></canvas>
 
-
-        <section id="snap-game">
-            <h2>🧠 Match the Cards to Unlock Gold-Star Awards!</h2>
-
-            <div id="game-board" class="grid-container"></div>
-
-            <div id="game-status">
+        <!-- 🧠 Snap Match Game Section -->
+        <section id="snap-game" class="snap-section">
+            <h2>🎴 Snap Match: Collect Your Gold-Star Cards!</h2>
+            <p id="status-text">Flip two cards to find a match.</p>
+        
+            <div id="game-board" class="snap-board"></div>
+        
+            <div class="game-info">
                 <p><strong>Matches Found:</strong> <span id="match-count">0</span> / 26</p>
-                <p><strong>Status:</strong> <span id="status-text">Flip two cards to find a match.</span></p>
+                <div id="unlocked-card" class="snap-reward"></div>
             </div>
 
             <div id="award-collection" class="grid-container"></div>
@@ -59,6 +60,8 @@
 
 
         </section>
+
+        
     </main>
 
 
@@ -69,6 +72,9 @@
 
     <script src="earn.js"></script>
     <script src="/script.js"></script>
+
+
+    
 </body>
 
 </html>

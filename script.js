@@ -94,11 +94,7 @@ function awardStarCard(cardName) {
     if (!earnedStarCards.includes(cardName)) {
         earnedStarCards.push(cardName);
         localStorage.setItem('earnedStarCards', JSON.stringify(earnedStarCards));
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+        
     }
 }
 
@@ -109,11 +105,7 @@ function awardBadge(cardName) {
     if (!earnedBadges.includes(cleanName)) {
         earnedBadges.push(cleanName);
         localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+        
     }
 }
 
@@ -331,17 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     window.startMusic = startMusic;
 
-    document.getElementById("titlePoll").addEventListener("submit", function (event) {
-        event.preventDefault();
-        const choice = document.querySelector('input[name="sharkTitle"]:checked');
-        const resultBox = document.getElementById("pollResult");
-
-        if (choice) {
-            resultBox.textContent = `Thanks for voting! You chose: "${choice.value}"`;
-        } else {
-            resultBox.textContent = "Please select an option before submitting.";
-        }
-    });
+    
 
 
 });

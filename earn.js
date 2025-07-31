@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    
+    const canvas = document.getElementById("wheel-canvas");
+    const spinButton = document.getElementById("spin-button");
+    const spinResult = document.getElementById("spin-result");
 
     // ✅ Voice Initialization – load voices as soon as available
 window.speechSynthesis.onvoiceschanged = () => {
@@ -39,29 +43,9 @@ function speakText(message, type = "default") {
 
     trySpeak();
 }
-    // === 🎴 Gold Star Snap Game ===
-    const board = document.getElementById('game-board');
-    const unlockedCard = document.getElementById('unlocked-card');
-    const spinResult = document.getElementById('spin-result');
-    const canvas = document.getElementById('wheel-canvas');
-    const spinButton = document.getElementById('spin-button');
-    document.addEventListener('DOMContentLoaded', () => {
-        const bgMusic = document.getElementById('bg-music');
-        const toggleBtn = document.getElementById('toggle-music');
+    
 
-        let musicPlaying = true;
 
-        toggleBtn.addEventListener('click', () => {
-            if (musicPlaying) {
-                bgMusic.pause();
-                toggleBtn.textContent = '🔇 Music On';
-            } else {
-                bgMusic.play().catch(err => console.warn("🎵 Music play failed:", err));
-                toggleBtn.textContent = '🔊 Music Off';
-            }
-            musicPlaying = !musicPlaying;
-        });
-    });
 
     const characterImages = [
         'Gold_Star_Cards/grumpy.png', 'Gold_Star_Cards/bon_bon.png', 'Gold_Star_Cards/craig_gold_star.png',
@@ -88,50 +72,121 @@ function speakText(message, type = "default") {
         'BADGES/puffy_award.png', 'BADGES/ronnie_award.png', 'BADGES/rylee_award.png'
     ];
 
+    
+
     let matchCount = 0;
-    const matchCountDisplay = document.getElementById("match-count");
-    const statusText = document.getElementById("status-text");
-    const flippedCards = [];
-    const cards = [...characterImages, ...characterImages].sort(() => 0.5 - Math.random());
+const matchCountDisplay = document.getElementById("match-count");
+const statusText = document.getElementById("status-text");
+const unlockedCard = document.getElementById("unlocked-card");
+const flippedCards = [];
+const cards = [...characterImages, ...characterImages].sort(() => 0.5 - Math.random());
 
-    function getCardName(imagePath) {
-        return imagePath
-            .split('/').pop().replace('.png', '')
-            .replace(/[_-]/g, ' ')
-            .replace(/\b\w/g, c => c.toUpperCase());
-    }
+function getCardName(imagePath) {
+    return imagePath
+        .split('/').pop().replace('.png', '')
+        .replace(/[_-]/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+}
 
-    function unlockBadgeReward() {
-        const allCardsCollected = (JSON.parse(localStorage.getItem('earnedStarCards')) || []).length === 26;
-        const allBadgesCollected = (JSON.parse(localStorage.getItem('earnedBadges')) || []).length === 26;
+function unlockBadgeReward() {
+    const earnedStarCards = JSON.parse(localStorage.getItem('earnedStarCards')) || [];
+    const earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
 
-        const legendaryPath = 'BADGES/legendary_gold_grumpy_award.png';
-        let earnedBadges = JSON.parse(localStorage.getItem('earnedBadges')) || [];
+    const allCardsCollected = earnedStarCards.length === characterImages.length;
+    const allBadgesCollected = earnedBadges.length === badgePool.length;
+    const legendaryPath = 'BADGES/legendary_gold_grumpy_award.png';
 
-        if (allCardsCollected && allBadgesCollected && !earnedBadges.includes(legendaryPath)) {
-            earnedBadges.push(legendaryPath);
-            localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
-            unlockedCard.innerHTML = `
+    if (allCardsCollected && allBadgesCollected && !earnedBadges.includes(legendaryPath)) {
+        earnedBadges.push(legendaryPath);
+        localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
+
+        unlockedCard.innerHTML = `
             <h3>🎉 You did it!</h3>
             <p>You've collected every badge and every card!</p>
             <img src="${legendaryPath}" alt="Legendary Gold Grumpy Shark"
-              style="width: 180px; border-radius: 12px; box-shadow: 0 0 20px gold;" />
-          `;
-            launchConfetti(); // optional: burst celebration
-        } else {
-            // Fallback: reward a random badge if legendary isn't ready
+                style="width: 180px; border-radius: 12px; box-shadow: 0 0 20px gold;" />
+        `;
 
-            let available = badgePool.filter(path => !earnedBadges.includes(path));
-            const randomBadge = available[Math.floor(Math.random() * available.length)];
-            earnedBadges.push(randomBadge);
-            localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
-            unlockedCard.innerHTML = `
+        speakText("You did it! Every badge and card is yours!", "badge");
+        // Confetti disabled for accessibility ✨
+    } else {
+        let available = badgePool.filter(path => !earnedBadges.includes(path));
+        const randomBadge = available[Math.floor(Math.random() * available.length)];
+        earnedBadges.push(randomBadge);
+        localStorage.setItem('earnedBadges', JSON.stringify(earnedBadges));
+
+        unlockedCard.innerHTML = `
             <h3>🏅 You've earned a new badge!</h3>
             <img src="${randomBadge}" alt="New Badge"
-              style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
-          `;
-        }
+                style="width: 150px; border-radius: 10px; box-shadow: 0 0 12px gold;" />
+        `;
+
+        const badgeName = getCardName(randomBadge);
+        speakText(`You've earned a new badge: ${badgeName}`, "badge");
     }
+}
+
+// 🃏 Card rendering loop
+cards.forEach((imagePath) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.setAttribute('aria-label', getCardName(imagePath));
+
+    card.innerHTML = `
+        <div class="card-inner">
+            <div class="card-front" style="background: url('Gold_Star_Cards/card-back.png') center/cover no-repeat;"></div>
+            <div class="card-back" style="background: url('${imagePath}') center/cover no-repeat;"></div>
+        </div>
+    `;
+
+    card.addEventListener('click', () => {
+        if (card.classList.contains('flipped') || flippedCards.length === 2) return;
+
+        card.classList.add('flipped');
+        flippedCards.push({ element: card, image: imagePath });
+
+        if (flippedCards.length === 2) {
+            const [first, second] = flippedCards;
+
+            if (first.image === second.image) {
+                setTimeout(() => {
+                    matchCount++;
+                    matchCountDisplay.textContent = matchCount;
+                    statusText.textContent = `✅ Matched: ${getCardName(first.image)}!`;
+
+                    // 🎨 Thumbnail preview
+                    const thumb = document.createElement('img');
+                    thumb.src = first.image;
+                    thumb.alt = getCardName(first.image);
+                    thumb.className = 'snap-thumb';
+                    unlockedCard.appendChild(thumb);
+
+                    speakText(`Matched ${getCardName(first.image)}!`, "star");
+
+                    flippedCards.splice(0, flippedCards.length);
+
+                    if (matchCount === characterImages.length) {
+                        statusText.textContent = `🎉 You've matched all Gold-Star cards!`;
+                        unlockBadgeReward();
+                    }
+                }, 300);
+            } else {
+                statusText.textContent = `❌ Not a match. Try again!`;
+                setTimeout(() => {
+                    first.element.classList.remove('flipped');
+                    second.element.classList.remove('flipped');
+                    flippedCards.splice(0, flippedCards.length);
+                    statusText.textContent = 'Flip two cards to find a match.';
+                }, 1000);
+            }
+        }
+    });
+
+})
+
+
+    const board = document.getElementById('game-board');
+board.innerHTML = ""; // ✅ Clear before re-rendering
 
     cards.forEach((imagePath) => {
         const card = document.createElement('div');
@@ -293,8 +348,6 @@ spinButton.addEventListener("click", () => {
 
             narrateReward("badge", badgeName);
         }
-
-        launchConfetti();
         updateSpinTimer();
 
         setTimeout(() => {
@@ -302,6 +355,88 @@ spinButton.addEventListener("click", () => {
             if (img) img.classList.remove('glow');
         }, 1600);
     }, 4100);
+
+    
+    
+
+
+
+
+function speakCard(name) {
+  const voice = speechSynthesis.getVoices().find(v => v.lang === 'en-AU') || null;
+  const utterance = new SpeechSynthesisUtterance(`Matched ${name}`);
+  if (voice) utterance.voice = voice;
+  utterance.rate = 1.2;
+  utterance.pitch = 1.4;
+  speechSynthesis.speak(utterance);
+}
+
+function normalize(name) {
+  return name.replace(".png", "").replace(/_/g, " ");
+}
+
+cards.forEach((filename) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.setAttribute('aria-label', normalize(filename));
+  card.innerHTML = `
+    <div class="card-inner">
+      <div class="card-front" style="background: url('Gold_Star_Cards/card-back.png') center/cover no-repeat;"></div>
+      <div class="card-back" style="background: url('Gold_Star_Cards/${filename}') center/cover no-repeat;"></div>
+    </div>
+  `;
+  board.appendChild(card);
+
+  card.addEventListener('click', () => {
+    if (card.classList.contains('flipped') || flippedCards.length === 2) return;
+
+    card.classList.add('flipped');
+    flippedCards.push({ element: card, name: filename });
+
+    if (flippedCards.length === 2) {
+      const [first, second] = flippedCards;
+
+      if (first.name === second.name) {
+        setTimeout(() => {
+          matchCount++;
+          matchCountDisplay.textContent = matchCount;
+          const displayName = normalize(first.name);
+          statusText.textContent = `✅ Matched: ${displayName}!`;
+          speakCard(displayName);
+
+          const earned = JSON.parse(localStorage.getItem("earnedStarCards")) || [];
+          if (!earned.includes(first.name)) {
+            earned.push(first.name);
+            localStorage.setItem("earnedStarCards", JSON.stringify(earned));
+          }
+
+          const thumb = document.createElement("img");
+            thumb.src = `Gold_Star_Cards/${first.name}`;
+            thumb.alt = displayName;
+            thumb.className = "snap-thumb";
+
+            unlockedCard.appendChild(thumb);
+
+          if (matchCount === characterImages.length) {
+            statusText.textContent = `🎉 You matched all Gold-Star cards!`;
+            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+          }
+        }, 350);
+      } else {
+        statusText.textContent = `❌ Not a match. Try again!`;
+        setTimeout(() => {
+          first.element.classList.remove('flipped');
+          second.element.classList.remove('flipped');
+          flippedCards = [];
+          statusText.textContent = "Flip two cards to find a match.";
+        }, 1000);
+      }
+    }
+  });
+
+  
+});
+
 });
 
 // ✅ Narration Helpers
@@ -349,46 +484,10 @@ function awardBadge(cardName) {
 
         narrateReward("badge", cleanName);
 
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
     }
 }
-    }
+}
 
-    // 🎊 Confetti Effect
-    function launchConfetti() {
-        const container = document.createElement("div");
-        container.style.position = "absolute";
-        container.style.top = "0";
-        container.style.left = "0";
-        container.style.width = "100%";
-        container.style.height = "100%";
-        container.style.pointerEvents = "none";
-        container.style.zIndex = "9999";
-
-        for (let i = 0; i < 30; i++) {
-            const piece = document.createElement("div");
-            piece.className = "confetti-piece";
-            piece.style.position = "absolute";
-            piece.style.width = "10px";
-            piece.style.height = "10px";
-            piece.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            piece.style.left = `${Math.random() * 100}%`;
-            piece.style.top = `${Math.random() * -20}px`;
-            piece.style.opacity = "1";
-            piece.style.borderRadius = "50%";
-            piece.style.animation = "confetti-fall 2s ease-out forwards";
-            piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-
-            container.appendChild(piece);
-        }
-
-        document.body.appendChild(container);
-        setTimeout(() => container.remove(), 2500);
-    }
 
     function awardBadge(characterName) {
         const audio = document.getElementById('badgeAudio');
@@ -404,6 +503,8 @@ function awardBadge(cardName) {
 
         });
     }
+
+    
 
 
     function stopMusicOnly() {
@@ -434,4 +535,6 @@ function awardBadge(cardName) {
     }
     window.startMusic = startMusic;
 
+
+    
 })

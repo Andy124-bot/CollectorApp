@@ -5,28 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grumpy Card Collector</title>
+
+    <!-- 🧩 Styles & Icons -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="confetti.browser.min.js"></script>
 
+    <!-- 📣 Social Sharing Metadata -->
     <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://musical-llama-845411.netlify.app/share-preview-v2.png">
-
+    <meta name="twitter:image" content="https://musical-llama-845411.netlify.app/share-preview-v2.png">
     <meta property="og:title" content="Grumpy Card Collector">
     <meta property="og:description" content="Spin the Reef Wheel and collect Gold-Star cards and badges!">
     <meta property="og:url" content="https://musical-llama-845411.netlify.app/">
     <meta property="og:image" content="https://musical-llama-845411.netlify.app/share-preview-v2.png">
     <meta property="og:type" content="website">
-
 </head>
 
 <body>
+    <!-- 🎙️ Narration Controls -->
     <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
     <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
 
-    <audio id="badgeAudio" src="won_award_badge.mp3" preload="auto"></audio>
+    <!-- 🔈 Badge Audio -->
+    <audio id="badgeAudio" src="audio/won_award_badge.mp3" preload="auto"></audio>
+
+    <!-- 🎉 Announcement -->
     <div id="announcementText" class="announcement"></div>
 
+    <!-- 🧭 Navigation -->
     <nav class="main-nav">
         <ul>
             <li><a href="index.html"><i class="fas fa-clone"></i> Home</a></li>
@@ -36,10 +41,10 @@
         </ul>
     </nav>
 
+    <!-- 🃏 Main Content -->
     <main role="main">
         <h2>🏅 Gold Star Cards</h2>
         <div id="star-card-collection" class="card-grid"></div>
-
 
         <h2><i class="fas fa-medal" style="color:gold; margin-right:8px;"></i> Gold Star Award Badges</h2>
         <p class="hint-text">✨ Collect to see in color!</p>
@@ -47,6 +52,7 @@
         <div id="award-collection" class="card-grid"></div>
     </main>
 
+    <!-- 🥳 Completion Popup -->
     <div id="completion-popup" class="popup hidden">
         <div class="popup-content">
             <h2>🎉 YOU HAVE WON A BADGE!</h2>
@@ -55,11 +61,7 @@
         </div>
     </div>
 
-    <audio id="bg-music" src="audio/grumpy_song.wav"></audio>
-    <button onclick="stopMusicOnly()">🛑 Stop Music</button>
-    <button onclick="startMusic()">▶️ Play Music</button>
-
-
+    <!-- 🚀 Scripts -->
     <script src="script.js"></script>
 </body>
 

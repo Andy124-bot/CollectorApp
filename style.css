@@ -1,16 +1,92 @@
-.grid-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+/* For grid-based layouts */
+.grid-card {
+    width: 100%;
+    max-width: 160px;
+    aspect-ratio: 0.85;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* For flex-based layouts */
+.flex-card {
+    width: 160px;
+    flex-shrink: 0;
+    aspect-ratio: 0.85;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 30px 18px;
     justify-content: center;
-    padding: 20px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fffdf5;
+    /* Soft neutral backdrop */
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Grid container */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 40px 5px;
+    justify-content: center;
+    padding: 40px;
+    width: 100%;
+    max-width: 1200px;
+    /* ⬅️ This was incorrectly set to 160px before */
+    margin: 0 auto;
+}
+
+.card-container,
+.card-grid,
+.collected-star-cards {
+    gap: 40px ;
+    justify-content: center;
+    padding: 40px 20px;
+    max-width: 1600px;
+    /* 10 cards × 160px + spacing */
+    margin: 0 auto;
 }
 
 .card {
-    width: 120px;
-    height: 180px;
-    perspective: 800px;
-    cursor: pointer;
+    width: 100%;
+    /* ⬅️ Let grid cell control width */
+    max-width: 160px;
+    aspect-ratio: 0.85;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 32px;
+    }
 }
 
 .card-inner {
@@ -25,6 +101,8 @@
     width: 100%;
     border-radius: 10px;
     box-shadow: 0 0 12px gold;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card.flipped .card-inner {
@@ -50,52 +128,30 @@
 .card-front img,
 .card-back img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
 }
 
-.card-front img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    /* ✅ Fits image within box without cropping */
-    padding: 6px;
-    /* Optional breathing room */
-}
 
-.card-back {
-    transform: rotateY(180deg);
-}
 
 .card-name {
     position: absolute;
-    bottom: 4px;
+    bottom: 0;
     left: 0;
     width: 100%;
-    padding: 4px;
+    padding: 8px 4px;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 1.0rem;
+    font-weight: 700;
+    color: #4B0082;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     font-family: 'Segoe UI', sans-serif;
+    line-height: 1.3;
+    box-sizing: border-box;
 }
 
-.card-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-    /* or space-evenly for a wider spread */
-    margin-top: 20px;
-}
 
-.card.collected {
-    width: 160px;
-    flex-shrink: 0;
-    text-align: center;
-}
 
 .card.collected img,
 .card.won img {
@@ -149,6 +205,49 @@
 
 .card.won {
     animation: sparkle 1.5s infinite;
+}
+
+.new-card {
+    animation: pop-in 0.6s ease-out;
+    box-shadow: 0 0 15px gold;
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.collected-star-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 40px 48px;
+    padding: 48px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fdf6e3;
+    /* Soft background for warmth */
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.collected-star-cards .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.collected-star-cards .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .award-card.collected {
@@ -236,7 +335,7 @@
 }
 
 .card.award-card img {
-    width: 140px;
+    width: 100%;
     height: auto;
     object-fit: contain;
 }
@@ -310,6 +409,104 @@
     100% {
         box-shadow: 0 0 0px gold;
     }
+}
+
+.card-preview {
+    animation: bounce-in 1s ease;
+    border: 5px solid gold;
+    border-radius: 12px;
+    box-shadow: 0 0 15px gold;
+    margin-top: 10px;
+}
+
+@keyframes bounce-in {
+    0% {
+        transform: scale(0.2);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+#unlocked-card img {
+    width: 150px;
+    height: 220px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/*  BADGES PAGE */
+#badge-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+#award-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.badge {
+    width: 150px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.badge img {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.badge img:hover {
+    transform: scale(1.1);
+}
+
+.badge.earned img {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.05);
+    box-shadow: 0 0 10px gold;
+    border-radius: 46px;
+    animation: glitter 1.5s infinite ease-in-out;
+}
+
+.badge:not(.earned) img {
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+
+.badge-label {
+    margin-top: 6px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+}
+
+
+
+
+h2 i.fas.fa-medal {
+    font-size: 1.3em;
+    text-shadow: 0 0 5px #ffd700;
+    vertical-align: middle;
 }
 
 button[onclick^="startMusic"],
@@ -421,103 +618,7 @@ button[onclick^="stopMusicOnly"]:hover {
     margin: 15px 0;
 }
 
-.card-preview {
-    animation: bounce-in 1s ease;
-    border: 5px solid gold;
-    border-radius: 12px;
-    box-shadow: 0 0 15px gold;
-    margin-top: 10px;
-}
 
-@keyframes bounce-in {
-    0% {
-        transform: scale(0.2);
-        opacity: 0;
-    }
-
-    60% {
-        transform: scale(1.2);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-#unlocked-card img {
-    width: 150px;
-    height: 220px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/*  BADGES PAGE */
-#badge-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
-
-#award-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
-
-.badge {
-    width: 150px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.badge img {
-    width: 120px;
-    height: auto;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-}
-
-.badge img:hover {
-    transform: scale(1.1);
-}
-
-.badge.earned img {
-    filter: none;
-    opacity: 1;
-    transform: scale(1.05);
-    box-shadow: 0 0 10px gold;
-    border-radius: 46px;
-    animation: glitter 1.5s infinite ease-in-out;
-}
-
-.badge:not(.earned) img {
-    filter: grayscale(100%);
-    opacity: 0.5;
-}
-
-.badge-label {
-    margin-top: 6px;
-    font-weight: bold;
-    font-size: 0.9em;
-    color: #333;
-}
-
-
-
-
-h2 i.fas.fa-medal {
-    font-size: 1.3em;
-    text-shadow: 0 0 5px #ffd700;
-    vertical-align: middle;
-}
 
 #snap-game {
     margin-top: 40px;
@@ -532,11 +633,32 @@ h2 i.fas.fa-medal {
     margin-bottom: 12px;
 }
 
-#game-board {
+.snap-board {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 16px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 24px;
+    justify-content: center;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .snap-board {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        max-width: 80px;
+    }
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
 #game-status p {
@@ -563,26 +685,6 @@ h2 i.fas.fa-medal {
     transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
-@keyframes confetti {
-    0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(300px) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-.confetti-piece {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: hsl(var(--hue), 100%, 60%);
-    top: 0;
-    animation: confetti 2s ease-out forwards;
-}
 
 .spin-timer {
     font-size: 16px;
@@ -590,21 +692,7 @@ h2 i.fas.fa-medal {
     margin-top: 8px;
 }
 
-@keyframes confetti-fall {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
 
-    100% {
-        transform: translateY(300px) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-.confetti-piece {
-    animation: confetti-fall 2s ease-out forwards;
-}
 
 
 .book-page {
@@ -926,3 +1014,48 @@ h2 i.fas.fa-medal {
     text-align: center;
     font-style: italic;
 }
+
+.snap-section {
+    padding: 40px;
+    text-align: center;
+}
+
+.snap-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 30px;
+    /* Previously 18px */
+    justify-items: center;
+    margin: 20px 0;
+    margin-top: 40px;
+}
+
+
+
+
+
+.snap-thumb {
+    width: 100px;
+    height: 100px;
+    border-radius: 6px;
+    box-shadow: 0 0 6px gold;
+    animation: sparkleIn 0.6s ease-out;
+}
+
+@keyframes sparkleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.6) rotate(-10deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+.spin-section {
+    padding: 20px;
+    text-align: center;
+}
+

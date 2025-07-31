@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grumpy Shark Bookshelf</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="confetti.browser.min.js"></script>
 
     <meta property="og:title" content="Grumpy Card Collector" />
     <meta property="og:description" content="Spin the Reef Wheel to collect Gold-Star cards and magical badges!" />
@@ -67,23 +66,10 @@
                         </label>
                         <div class="poll-box">
                             <h3>📊 Help Us Choose a Title!</h3>
-                            <form action="https://formspree.io/f/movlaqjr" method="POST">
-
-                                <label>
-                                    <input type="radio" name="sharkTitle" value="Grumpy Shark" required>
-                                    Keep Title as Grumpy Shark
-                                </label><br>
-
-                                <label>
-                                    <input type="radio" name="sharkTitle" value="Happy Shark">
-                                    Change Title to Happy Shark
-                                </label><br>
-
-                                <label>
-                                    <input type="radio" name="sharkTitle" value="Sharkey and Friends">
-                                    Change Title to Sharkey and Friends
-                                </label><br>
-
+                            <form id="titlePoll" action="https://formspree.io/f/xanbyzln" method="POST">
+                                <input type="radio" name="sharkTitle" value="Grumpy Shark" required> Grumpy Shark<br>
+                                <input type="radio" name="sharkTitle" value="Happy Shark"> Happy Shark<br>
+                                <input type="radio" name="sharkTitle" value="Sharkey and Friends"> Sharkey and Friends<br>
                                 <button type="submit">Cast Your Vote</button>
                             </form>
                             <div id="pollResult" class="poll-result"></div>
@@ -101,15 +87,14 @@
                     document.getElementById("email-link").style.display = checked ? "block" : "none";
                 }
             </script>
-    </div>
-    </section>
-    </main>
-    </div>
-
+        </main> <!-- closes .book-page -->
+        </div> <!-- closes .books-background -->
+    
+    <!-- 🎵 Audio + Buttons -->
     <audio id="bg-music" src="audio/grumpy_song.wav"></audio>
     <button onclick="stopMusicOnly()">🛑 Stop Music</button>
     <button onclick="startMusic()">▶️ Play Music</button>
-
+    
     <script src="/script.js"></script>
 </body>
 
