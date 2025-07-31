@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Collector Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <meta property="og:title" content="Grumpy Card Collector" />
+    <meta property="og:description" content="Spin the Reef Wheel to collect Gold-Star cards and magical badges!" />
+    <meta property="og:url" content="https://musical-llama-845411.netlify.app/" />
+    <meta property="og:image" content="https://musical-llama-845411.netlify.app/assets/share-preview.png" />
+    <meta property="og:type" content="website" />
+    
+</head>
+
+<body>
+
+    <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
+    <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">🃏 Home</a></li>
+            <li><a href="earn.html">🎰 Earn Cards</a></li>
+            <li><a href="books.html">🏅 Books</a></li>
+            <li><a href="profile.html">👤 Profile</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <section class="badges-section">
+            <h1>Collection of</h1>
+            <h2 class="award-cards-text">⭐ My Award Badges</h2>
+            <div id="award-container" class="badge-container"></div>
+        </section>
+
+        <section class="profile-stats">
+            <p id="collected-badge-count">Collected Badges: 0</p>
+            <p id="total-badge-count">Total Badges Available: 26/26</p>
+            <p id="badge-rank">Badge Rank: Bubble Beginner</p>
+        </section>
+
+        <section>
+            <h2>🃏 Collected Gold Star Cards</h2>
+            <div id="collected-star-cards" class="card-grid"></div>
+        </section>
+
+        <section class="card-stats">
+            <p id="collected-card-count">Collected Cards: 0</p>
+            <p id="total-card-count">Total Cards Available: 26/26</p>
+
+        </section>
+
+    </main>
+
+    <div id="badge-popup" class="popup hidden">
+        <div class="popup-content">
+            <h2>🎉 Great Work!</h2>
+            <p>You won my Award Badge!</p>
+            <button onclick="closeBadgePopup()">Got it!</button>
+        </div>
+    </div>
+
+
+    <audio id="bg-music" src="audio/grumpy_song.wav"></audio>
+    <button onclick="stopMusicOnly()">🛑 Stop Music</button>
+    <button onclick="startMusic()">▶️ Play Music</button>
+
+    <script src="/profile.js"></script>
+    <script src="/script.js"></script>
+</body>
+
+</html>

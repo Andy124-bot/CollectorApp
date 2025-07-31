@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grumpy Card Collector</title>
+
+    <!-- 🧩 Styles & Icons -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- 📣 Social Sharing Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://musical-llama-845411.netlify.app/share-preview-v2.png">
+    <meta property="og:title" content="Grumpy Card Collector">
+    <meta property="og:description" content="Spin the Reef Wheel and collect Gold-Star cards and badges!">
+    <meta property="og:url" content="https://musical-llama-845411.netlify.app/">
+    <meta property="og:image" content="https://musical-llama-845411.netlify.app/share-preview-v2.png">
+    <meta property="og:type" content="website">
+</head>
+
+<body>
+    <!-- 🎙️ Narration Controls -->
+    <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
+    <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
+
+    <!-- 🔈 Badge Audio -->
+    <audio id="badgeAudio" src="audio/won_award_badge.mp3" preload="auto"></audio>
+
+    <!-- 🎉 Announcement -->
+    <div id="announcementText" class="announcement"></div>
+
+    <!-- 🧭 Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html"><i class="fas fa-clone"></i> Home</a></li>
+            <li><a href="earn.html"><i class="fas fa-gift"></i> Earn Cards</a></li>
+            <li><a href="books.html"><i class="fas fa-star"></i> Grumpy Adventure Books</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- 🃏 Main Content -->
+    <main role="main">
+        <h2>🏅 Gold Star Cards</h2>
+        <div id="star-card-collection" class="card-grid"></div>
+
+        <h2><i class="fas fa-medal" style="color:gold; margin-right:8px;"></i> Gold Star Award Badges</h2>
+        <p class="hint-text">✨ Collect to see in color!</p>
+        <p> !!!Keep Collecting To WIN Rare Grumpy Award Badge + Legendary Golden Grumpy Award Badge!!! </p>
+        <div id="award-collection" class="card-grid"></div>
+    </main>
+
+    <!-- 🥳 Completion Popup -->
+    <div id="completion-popup" class="popup hidden">
+        <div class="popup-content">
+            <h2>🎉 YOU HAVE WON A BADGE!</h2>
+            <p>Check your profile page to see your new badge.</p>
+            <button onclick="closePopup()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- 🚀 Scripts -->
+    <script src="script.js"></script>
+</body>
+
+</html>

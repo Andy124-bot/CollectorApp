@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Earn Grumpy Cards</title>
+    <link rel="stylesheet" href="style.css">
+
+    <meta property="og:title" content="Grumpy Card Collector" />
+    <meta property="og:description" content="Spin the Reef Wheel to collect Gold-Star cards and magical badges!" />
+    <meta property="og:url" content="https://musical-llama-845411.netlify.app/" />
+    <meta property="og:image" content="https://musical-llama-845411.netlify.app/assets/share-preview.png" />
+    <meta property="og:type" content="website" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
+    
+</head>
+
+<body>
+
+    <button onclick="speakPageText()" aria-label="Read entire page">📖 Read All</button>
+    <button onclick="stopSpeaking()" aria-label="Stop voice narration">⏹️ Stop Voice</button>
+
+    <audio id="badgeAudio" src="audio/won_award_badge.mp3" preload="auto"></audio>
+    <div id="announcementText" class="announcement" aria-live="assertive">
+    </div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">🃏 Home</a></li>
+            <li><a href="earn.html">🎰 Earn Cards</a></li>
+            <li><a href="books.html">🏅 Books</a></li>
+            <li><a href="profile.html">👤 Profile</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>🎰 Spin to Win a Gold-Star Card!</h1>
+        <button id="spin-button" aria-label="Spin the Reef Wheel and unlock a prize!">Spin the Reef Wheel</button>
+        <div id="spin-result"></div>
+        <div id="unlocked-card"></div>
+
+        <p id="spin-timer" class="spin-timer">🕒 Next spin in: 23h 59m</p>
+
+        <canvas id="wheel-canvas" width="500" height="500"></canvas>
+
+        <!-- 🧠 Snap Match Game Section -->
+        <section id="snap-game" class="snap-section">
+            <h2>🎴 Snap Match: Collect Your Gold-Star Cards!</h2>
+            <p id="status-text">Flip two cards to find a match.</p>
+        
+            <div id="game-board" class="snap-board"></div>
+        
+            <div class="game-info">
+                <p><strong>Matches Found:</strong> <span id="match-count">0</span> / 26</p>
+                <div id="unlocked-card" class="snap-reward"></div>
+            </div>
+
+            <div id="award-collection" class="grid-container"></div>
+
+
+
+        </section>
+
+        
+    </main>
+
+
+    <audio id="bg-music" src="audio/grumpy_song.wav"></audio>
+    <button onclick="stopMusicOnly()">🛑 Stop Music</button>
+    <button onclick="startMusic()">▶️ Play Music</button>
+
+
+    <script src="earn.js"></script>
+    <script src="/script.js"></script>
+
+
+    
+</body>
+
+</html>
