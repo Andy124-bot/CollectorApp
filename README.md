@@ -23,3 +23,4 @@ A fun, accessible card collection game for younger audiences—part of the Grump
 
 ---
 
+BY Craig Dixon
